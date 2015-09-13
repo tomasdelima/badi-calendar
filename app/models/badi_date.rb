@@ -5,12 +5,16 @@ class BadiDate
   #   @gregorian_date = gregorian_date
   # end
 
-  def initialize(year, month, gregorian_date)
-  # def initialize(year, month, day)
+  def initialize(year, month, day)
     # @gregorian_date = self.to_gregorian
-    @gregorian_date = gregorian_date
+    # @gregorian_date = gregorian_date
     @year = year
     @month = month
+    @day = day
+  end
+
+  def to_s
+    "#{year}-#{month}-#{day}"
   end
 
   def inspect
@@ -18,26 +22,25 @@ class BadiDate
   end
 
   def to_gregorian
-    # gregorian_day =
-    # gregorian_month =
-    # gregorian_year =
-    @gregorian_date
+    @gregorian_date ||= Date.new(gregorian_year, gregorian_month, gregorian_day)
   end
 
   def day
-    @day ||= if(days_since_last_naw_ruz < 19 * 18)
-      days_since_last_naw_ruz % 19 + 1
-    else
-      20 - days_until_next_naw_ruz
-    end
+    # @day ||= if(days_since_last_naw_ruz < 19 * 18)
+    #   days_since_last_naw_ruz % 19 + 1
+    # else
+    #   20 - days_until_next_naw_ruz
+    # end
+    @day
   end
 
   def month
-    @month ||= if(days_since_last_naw_ruz < 19 * 18)
-      days_since_last_naw_ruz / 19 + 1
-    else
-      (days_until_next_naw_ruz - 1) / 19 + 19
-    end
+    # @month ||= if(days_since_last_naw_ruz < 19 * 18)
+    #   days_since_last_naw_ruz / 19 + 1
+    # else
+    #   (days_until_next_naw_ruz - 1) / 19 + 19
+    # end
+    @month
   end
 
   def year
@@ -48,31 +51,32 @@ class BadiDate
 
   def month_name
     {
-      1  => "Bahá",
-      2  => "Jalál",
-      3  => "Jamál",
-      4  => "‘Aẓamat",
-      5  => "Núr",
-      6  => "Raḥmat",
-      7  => "Kalimát",
-      8  => "Kamál",
-      9  => "Asmá’",
-      10 => "‘Izzat",
-      11 => "Mashíyyat",
-      12 => "‘Ilm",
-      13 => "Qudrat",
-      14 => "Qawl",
-      15 => "Masá’il",
-      16 => "Sharaf",
-      17 => "Sulṭán",
-      18 => "Mulk",
-      19 => "‘Alá’",
-      20 => "Ayyám-i-Há",
+      1   => "Bahá",
+      2   => "Jalál",
+      3   => "Jamál",
+      4   => "‘Aẓamat",
+      5   => "Núr",
+      6   => "Raḥmat",
+      7   => "Kalimát",
+      8   => "Kamál",
+      9   => "Asmá’",
+      10  => "‘Izzat",
+      11  => "Mashíyyat",
+      12  => "‘Ilm",
+      13  => "Qudrat",
+      14  => "Qawl",
+      15  => "Masá’il",
+      16  => "Sharaf",
+      17  => "Sulṭán",
+      18  => "Mulk",
+      19  => "‘Alá’",
+      20  => "Ayyám-i-Há",
+      nil => "Ayyám-i-Há",
     }[month]
   end
 
   def last_naw_ruz_date
-    year_shift = (gregorian_date >= BadiDate.naw_ruz_date_for(year)) ? 0 : -1
+    year_shift = (self < BadiDate.naw_ruz_date_for(year)) ? -1 : 0
     BadiDate.naw_ruz_date_for(year + year_shift)
   end
 
@@ -82,7 +86,8 @@ class BadiDate
   end
 
   def days_since_last_naw_ruz
-    (gregorian_date - last_naw_ruz_date).to_i
+    # (gregorian_date - last_naw_ruz_date).to_i
+    (month - 1) * 19 + day - 1
   end
 
   def days_until_next_naw_ruz
@@ -94,34 +99,63 @@ class BadiDate
   end
 
   def self.naw_ruz_date_for(year)
-    Date.new(year + 1843, 3, naw_ruz_day_for(year))
+    BadiDate.new(year, 1, 1)
+  end
+
+  def self.new_year_date_for(year)
+    day = 23 - naw_ruz_day_for(year)
+    BadiDate.new(year, 16, day)
   end
 
   def >(date)
-    self.to_gregorian > (date.class == Date ? date : date.to_gregorian)
+    # self.to_gregorian > (date.class == Date ? date : date.to_gregorian)
+    if year == date.year
+      if month == date.month
+        day > date.day
+      else
+        month > date.month
+      end
+    else
+      year > date.year
+    end
+  end
+
+  def ==(date)
+    ['day', 'month', 'year'].all? do |var|
+      send(var) == date.send(var)
+    end
   end
 
   def <(date)
-    self.to_gregorian < (date.class == Date ? date : date.to_gregorian)
+    # self.to_gregorian < (date.class == Date ? date : date.to_gregorian)
+    date > self
+  end
+
+  def +(date)
+    self.to_gregorian + (date.class == Date ? date : date.to_gregorian)
+  end
+
+  def -(date)
+    self.to_gregorian - (date.class == Date ? date : date.to_gregorian)
   end
 
 
 
   # private
 
-  def gregorian_date
-    @gregorian_date
-  end
+  # def gregorian_date
+  #   to_gregorian
+  # end
 
   def gregorian_year
-    1843 + year + (self > BadiDate.naw_ruz_date_for(year) ? 1 : 0)
+    @gregorian_year ||= 1843 + year + (self < BadiDate.new_year_date_for(year) ? 0 : 1)
   end
 
   def gregorian_month
-    if(days_since_last_naw_ruz < 19 * 18)
-      days_since_last_naw_ruz / 19 + 1
-    else
-      (days_until_next_naw_ruz - 1) / 19 + 19
-    end
+    @gregorian_month ||= (Date.naw_ruz_date_for(gregorian_year) + days_since_last_naw_ruz).month
+  end
+
+  def gregorian_day
+    @gregorian_day ||= (Date.naw_ruz_date_for(gregorian_year) + days_since_last_naw_ruz).day
   end
 end
