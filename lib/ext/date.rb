@@ -17,8 +17,16 @@ class Date
       Date.naw_ruz_date_for(year - (self < Date.naw_ruz_date_for(year) ? 1 : 0))
     end
 
+    def next_naw_ruz_date
+      Date.naw_ruz_date_for(year + (self < Date.naw_ruz_date_for(year) ? 0 : 1))
+    end
+
     def days_since_last_naw_ruz
       (self - last_naw_ruz_date).to_i
+    end
+
+    def days_until_next_naw_ruz
+      (next_naw_ruz_date - self).to_i
     end
 
     def badi_year
@@ -26,7 +34,13 @@ class Date
     end
 
     def badi_month
-      days_since_last_naw_ruz / 19 + 1
+      if days_until_next_naw_ruz < 19
+        19
+      elsif days_since_last_naw_ruz < 18 * 19
+        days_since_last_naw_ruz / 19 + 1
+      else
+        18.5
+      end
     end
 
     def badi_day

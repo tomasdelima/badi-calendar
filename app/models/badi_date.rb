@@ -16,36 +16,30 @@ class BadiDate
   end
 
   def ==(date)
-    if date.class == BadiDate
-      this = self
-    elsif date.class == Date
-      this = to_gregorian
-    else
-      raise ArgumentError, "Wrong argument class: #{date.class}. Only BadiDate allowed."
-    end
+    this = (date.class == BadiDate ? self : to_gregorian)
     ['day', 'month', 'year'].all? {|var| this.send(var) == date.send(var) }
   end
 
   def to_gregorian
-    @gregorian_date ||= if month < 19
-      Date.naw_ruz_date_for(year + 1843) + days_since_last_naw_ruz
-    else
+    @gregorian_date ||= if month == 19
       Date.naw_ruz_date_for(year + 1844) - days_until_next_naw_ruz
+    else
+      Date.naw_ruz_date_for(year + 1843) + days_since_last_naw_ruz
     end
   end
 
   def month_name
-    {1=>"Bahá",2=>"Jalál",3=>"Jamál",4=>"‘Aẓamat",5=>"Núr",6=>"Raḥmat",7=>"Kalimát",8=>"Kamál",9=>"Asmá’",10=>"‘Izzat",11=>"Mashíyyat",12=>"‘Ilm",13=>"Qudrat",14=>"Qawl",15=>"Masá’il",16=>"Sharaf",17=>"Sulṭán",18=>"Mulk",19=>"‘Alá’",20=>"Ayyám-i-Há",nil=>"Ayyám-i-Há",}[month]
+    {1=>"Bahá",2=>"Jalál",3=>"Jamál",4=>"‘Aẓamat",5=>"Núr",6=>"Raḥmat",7=>"Kalimát",8=>"Kamál",9=>"Asmá’",10=>"‘Izzat",11=>"Mashíyyat",12=>"‘Ilm",13=>"Qudrat",14=>"Qawl",15=>"Masá’il",16=>"Sharaf",17=>"Sulṭán",18=>"Mulk",18.5=>"Ayyám-i-Há",19=>"‘Alá’",}[month]
   end
 
   private
 
     def days_since_last_naw_ruz
-      (month - 1) * 19 + day - 1
+      (month.ceil - 1) * 19 + day - 1
     end
 
     def days_until_next_naw_ruz
-      20 - day unless month < 19
+      20 - day if month == 19
     end
 
     def self.naw_ruz_day_for(year)

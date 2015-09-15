@@ -1,6 +1,5 @@
 require 'rails_helper'
 require 'csv'
-load 'date.rb'
 
 RSpec.describe Date, type: :model do
   let(:file) {
@@ -33,6 +32,23 @@ RSpec.describe Date, type: :model do
           gregorian_date = Date.new(row['g-year'], row['g-month'], row['g-day'])
 
           expect(gregorian_date.to_badi).to eq badi_date
+        end
+      end
+    end
+
+    context 'calculating the Ayyám-i-Há dates' do
+      let(:file_name) { 'ayyam-i-ha.csv' }
+
+      it 'returns the correct badi date' do
+        file.map do |row|
+          first_gregorian_date = Date.new(row['g-year'], row['first-month'], row['first-day'])
+          last_gregorian_date = Date.new(row['g-year'], row['last-month'], row['last-day'])
+
+          first_badi_date = BadiDate.new(row['g-year'] - 1844, 18.5, 1)
+          last_badi_date = BadiDate.new(row['g-year'] - 1844, 18.5, row['duration'].to_i)
+
+          expect(first_gregorian_date.to_badi).to eq first_badi_date
+          expect(last_gregorian_date.to_badi).to eq last_badi_date
         end
       end
     end

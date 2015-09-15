@@ -43,5 +43,22 @@ RSpec.describe BadiDate, type: :model do
         end
       end
     end
+
+    context 'calculating the Ayyám-i-Há dates' do
+      let(:file_name) { 'ayyam-i-ha.csv' }
+
+      it 'returns the correct gregorian date' do
+        file.map do |row|
+          first_badi_date = BadiDate.new(row['g-year'] - 1844, 18.5, 1)
+          last_badi_date = BadiDate.new(row['g-year'] - 1844, 18.5, row['duration'].to_i)
+
+          first_gregorian_date = Date.new(row['g-year'], row['first-month'], row['first-day'])
+          last_gregorian_date = Date.new(row['g-year'], row['last-month'], row['last-day'])
+
+          expect(first_badi_date.to_gregorian).to eq first_gregorian_date
+          expect(last_badi_date.to_gregorian).to eq last_gregorian_date
+        end
+      end
+    end
   end
 end
