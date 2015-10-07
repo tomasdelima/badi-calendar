@@ -53,4 +53,22 @@ RSpec.describe Date, type: :model do
       end
     end
   end
+
+  describe '#holiday?' do
+    let(:gregorian_date) { Date.new(2020, 1, 5) }
+
+    context 'when it is a holiday' do
+      let!(:holiday) { Holiday.create(date: gregorian_date, name: 'Holiday Name') }
+
+      it 'returns true' do
+        expect(gregorian_date.holiday?).to eq true
+      end
+    end
+
+    context 'when it is not a holiday' do
+      it 'returns false' do
+        expect(gregorian_date.holiday?).to eq false
+      end
+    end
+  end
 end

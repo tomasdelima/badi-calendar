@@ -60,5 +60,39 @@ RSpec.describe BadiDate, type: :model do
         end
       end
     end
+
+    context 'calculating the twin holidays dates' do
+      let(:file_name) { 'twin-holidays.csv' }
+
+      it 'returns the correct gregorian date' do
+        file.map do |row|
+          badi_date = BadiDate.new(row['b-bab-year'], row['b-bab-month'], row['b-bab-day'])
+          gregorian_date = Date.new(row['g-bab-year'], row['g-bab-month'], row['g-bab-day'])
+          expect(badi_date.to_gregorian).to eq gregorian_date
+
+          badi_date = BadiDate.new(row['b-baha-year'], row['b-baha-month'], row['b-baha-day'])
+          gregorian_date = Date.new(row['g-baha-year'], row['g-baha-month'], row['g-baha-day'])
+          expect(badi_date.to_gregorian).to eq gregorian_date
+        end
+      end
+    end
+  end
+
+  describe '#holiday?' do
+    let(:badi_date) { BadiDate.new(200, 1, 5) }
+
+    context 'when it is a holiday' do
+      let!(:holiday) { Holiday.create(date: badi_date.to_gregorian, name: 'Holiday Name') }
+
+      it 'returns true' do
+        expect(badi_date.holiday?).to eq true
+      end
+    end
+
+    context 'when it is not a holiday' do
+      it 'returns false' do
+        expect(badi_date.holiday?).to eq false
+      end
+    end
   end
 end

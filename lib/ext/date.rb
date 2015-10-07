@@ -3,6 +3,10 @@ class Date
     BadiDate.new(badi_year, badi_month, badi_day)
   end
 
+  def holiday?
+    Holiday.where(date: self).count > 0
+  end
+
   private
 
     def self.naw_ruz_day_for(year)
