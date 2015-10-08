@@ -1,0 +1,8 @@
+<ion-view view-title="{{resource}} {{year}}">
+  <div class="parent">
+    <a class="child" ng-repeat="item in collection" href="{{resourceFor(item)}}">
+      <span class="icon {{item.icon}}"></span>
+      <span class="name">{{item.name}}</span>
+    </a>
+  </div>
+</ion-view>

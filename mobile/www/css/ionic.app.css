@@ -7699,3 +7699,15 @@ a.button {
   opacity: 0;
   -webkit-transition-duration: 0s;
   transition-duration: 0s; }
+
+.platform-android .parent {
+  padding: 93px 0 0px; }
+
+.parent {
+  padding: 44px 0 49px;
+  height: 100%; }
+  .parent .child {
+    height: calc(100%/7);
+    width: calc(100%/3);
+    display: inline-block;
+    border: 1px solid red; }
