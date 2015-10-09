@@ -20,20 +20,4 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
-
-.platform-android .parent { padding: 93px 0 0px }
-.parent {
-  padding: 44px 0 49px;
-  height: 100%;
-
-  .child {
-    height: calc(100%/7);
-    width: calc(100%/3);
-    display: inline-block;
-    border: 1px solid red;
-
-    .day {
-
-    }
-  }
-}
+@import "scss/calendar";

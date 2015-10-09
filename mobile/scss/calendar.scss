@@ -1,0 +1,45 @@
+.bar .title.title-left.header-item {
+  text-align: center;
+}
+
+.platform-android .parent { padding: 93px 0 5px }
+
+.parent {
+  padding: 49px 0 54px;
+  height: 100%;
+  line-height: 12px;
+
+  .child {
+    height: calc(100%/7);
+    width: calc(100%/3);
+    display: inline-block;
+    padding: 5px;
+    color: #333;
+
+    .outer {
+      background-color: #eee;
+      height: 100%;
+      border-radius: 6px;
+      position: relative;
+
+      .inner {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -webkit-transform: translate(-50%, -50%);
+        -moz-transform: translate(-50%, -50%);
+
+        .arabic, .portuguese {
+          text-align: center;
+        }
+
+        .portuguese {
+          color: #666;
+          font-size: 11px;
+          margin-top: 1px;
+        }
+      }
+    }
+  }
+}
