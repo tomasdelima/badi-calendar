@@ -35,7 +35,8 @@ angular.module('badi-calendar', ['ionic', 'badi-calendar.controllers', 'badi-cal
     .state('tab', {
     url: '/tab',
     abstract: true,
-    templateUrl: 'templates/tabs.html'
+    templateUrl: 'templates/tabs.html',
+    controller: 'AppCtrl'
   })
 
   .state('tab.year', {

@@ -1,5 +1,5 @@
 <ion-view>
-  <ion-header-bar class="bar-energizeda"  align-title="center">
+  <ion-header-bar class="bar-energizeda" ng-init="loadHolidays()" align-title="center">
     <h1 id="title" class="title title-center">
       <a href="{{parentResourceUrl}}">{{monthName}} {{year}}</a>
     </h1>
@@ -14,6 +14,7 @@
 
     <a class="child {{item.htmlClass}}" ng-repeat="item in collection" ng-click="goToChildResource(item.id)">
       <div class="outer">
+        <span class="holidays-count" ng-if="holidaysFor[item.id] > 0">{{holidaysFor[item.id]}}</span>
         <div class="inner">
           <div class="arabic">{{item .alternativeName || item.arabicName}}</div>
           <div class="portuguese">{{item.portugueseName}}</div>
