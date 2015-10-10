@@ -1,11 +1,30 @@
-<ion-view view-title="{{resourceName}} {{year}}" view-class='title-right'>
+<ion-view>
+  <ion-header-bar class="bar-energizeda"  align-title="center">
+    <h1 id="title" class="title title-center">
+      <a href="{{parentResourceUrl}}">{{monthName}} {{year}}</a>
+    </h1>
+  </ion-header-bar>
+
   <div class="parent">
-    <a class="child" ng-repeat="item in collection" href="{{resourceFor(item)}}">
+    <a class="child" href="" ng-click="goToSiblingResource(-1)">
       <div class="outer">
-        <span class="inner {{item.icon}}">
-          <div class="arabic">{{item.arabicName}}</div>
+        <div class="inner ion-android-arrow-back"></div>
+      </div>
+    </a>
+
+    <a class="child {{item.htmlClass}}" ng-repeat="item in collection" ng-click="goToChildResource(item.id)">
+      <div class="outer">
+        <div class="inner">
+          <div class="arabic">{{item .alternativeName || item.arabicName}}</div>
           <div class="portuguese">{{item.portugueseName}}</div>
-        </span>
+          <div class="day-number">{{item.dayNumber}}</div>
+        </div>
+      </div>
+    </a>
+
+    <a class="child" href="" ng-click="goToSiblingResource(+1)">
+      <div class="outer">
+        <div class="inner ion-android-arrow-forward"></div>
       </div>
     </a>
   </div>

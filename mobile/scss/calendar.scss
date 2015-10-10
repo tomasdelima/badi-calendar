@@ -1,5 +1,6 @@
-.bar .title.title-left.header-item {
-  text-align: center;
+#title a {
+  display: block;
+  text-decoration: none;
 }
 
 .platform-android .parent { padding: 93px 0 5px }
@@ -7,7 +8,8 @@
 .parent {
   padding: 49px 0 54px;
   height: 100%;
-  line-height: 12px;
+  line-height: 0;
+  font-size: 0;
 
   .child {
     height: calc(100%/7);
@@ -15,6 +17,16 @@
     display: inline-block;
     padding: 5px;
     color: #333;
+    line-height: 12px;
+    font-size: 14px;
+
+    &.ayyamiha {
+      width: calc(100%*2/15);
+    }
+
+    &.around-ayyamiha {
+      width: calc(100%*4/15);
+    }
 
     .outer {
       background-color: #eee;

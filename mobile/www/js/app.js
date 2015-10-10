@@ -39,26 +39,26 @@ angular.module('badi-calendar', ['ionic', 'badi-calendar.controllers', 'badi-cal
   })
 
   .state('tab.year', {
-    url: '/years/:year',
+    url: '/years/:year/months',
     views: {
       'tab-calendar': {
         templateUrl: 'templates/tab-calendar.html',
-        controller: 'CalendarCtrl'
+        controller: 'YearCtrl'
       }
     }
   })
 
   .state('tab.month', {
-    url: '/years/:year/months/:month',
+    url: '/years/:year/months/:month/days',
     views: {
       'tab-calendar': {
         templateUrl: 'templates/tab-calendar.html',
-        controller: 'CalendarCtrl'
+        controller: 'MonthCtrl'
       }
     }
   })
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/years/172')
+  $urlRouterProvider.otherwise('/tab/years/172/months')
 
 })
