@@ -75,6 +75,32 @@ angular.module('badi-calendar.services', [])
   }
 })
 
+.factory('Holidays', function(DBService) {
+  return {
+    load: function(scope) {
+      if(scope.resource == 'year') {
+        var sqlString = "select count(id) as count, month from holidays where year = '" + scope.year + "' group by month"
+      } else if (scope.resource == 'month') {
+        var sqlString = "select count(id) as count, day from holidays where year = '" + scope.year + "' and month = '" + scope.month + "' group by day"
+      } else {
+        var sqlString = "select * from holidays where year = '" + scope.year + "' and month = '" + scope.month + "' and day = '" + scope.day + "'"
+      }
+
+      DBService.execute(sqlString, function(r){
+        scope.holidays = {}
+        for(i=0;i<r.rows.length;i++){
+          if(scope.resource == 'day') {
+            scope.holidays[r.rows.item(i)[scope.childResource]] = r.rows.item(i)
+          } else {
+            scope.holidays[r.rows.item(i)[scope.childResource]] = r.rows.item(i).count
+          }
+        }
+        scope.holidays
+      }, 1)
+    }
+  }
+})
+
 .service('DBService', function($http, $state) {
   db = this
   return {
@@ -168,7 +194,7 @@ angular.module('badi-calendar.services', [])
       // })
     },
     select: function(table, collection, id, callBack, verbose){
-      var sqlString = 'select * from ' + table + ' where ' + (id?'and id="'+id+'"':'')
+      var sqlString = 'select * from ' + table + (id ? " where id = '" + id + "'" : '')
       this.execute(sqlString, function(results) {
         for (var i=0; i<results.rows.length; i++) {
           collection.push(results.rows.item(i))

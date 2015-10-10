@@ -4,6 +4,20 @@
 }
 
 .platform-android .parent { padding: 93px 0 5px }
+.year-month .parent .child {
+  height: calc(100%/7);
+  width: calc(100%/3);
+
+  @media (orientation: landscape) {
+    height: calc(100%/3);
+    width: calc(100%/7);
+  }
+}
+
+.day .parent .child {
+  height: 100%;
+  width: 100%;
+}
 
 .parent {
   padding: 49px 0 54px;
@@ -12,8 +26,6 @@
   font-size: 0;
 
   .child {
-    height: calc(100%/7);
-    width: calc(100%/3);
     display: inline-block;
     padding: 5px;
     color: #333;
@@ -22,10 +34,18 @@
 
     &.ayyamiha {
       width: calc(100%*2/15);
+
+      @media (orientation: landscape) {
+        width: calc(100%*2/35);
+      }
     }
 
     &.around-ayyamiha {
       width: calc(100%*4/15);
+
+      @media (orientation: landscape) {
+        width: calc(100%*4/35);
+      }
     }
 
     .outer {

@@ -3,7 +3,7 @@ require 'csv'
 def read_csv_file(file_name)
   raw_data = File.read(Rails.root.join("spec/uhj-reduced-dates/#{file_name}"))
   data = CSV.parse(raw_data, headers: true)
-  data.map {|row| row.map {|k,v| row[k] = v.to_i} }
+  data.map {|row| row.map {|k,v| row[k] = v.to_i == 0 ? v : v.to_i} }
   data
 end
 

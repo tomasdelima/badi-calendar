@@ -1,11 +1,11 @@
-<ion-view>
-  <ion-header-bar class="bar-energizeda" ng-init="loadHolidays()" align-title="center">
+<ion-view class="year-month" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">
+  <ion-header-bar class="bar-energizeda" align-title="center">
     <h1 id="title" class="title title-center">
       <a href="{{parentResourceUrl}}">{{monthName}} {{year}}</a>
     </h1>
   </ion-header-bar>
 
-  <div class="parent">
+  <div class="parent" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">
     <a class="child" href="" ng-click="goToSiblingResource(-1)">
       <div class="outer">
         <div class="inner ion-android-arrow-back"></div>
@@ -14,7 +14,7 @@
 
     <a class="child {{item.htmlClass}}" ng-repeat="item in collection" ng-click="goToChildResource(item.id)">
       <div class="outer">
-        <span class="holidays-count" ng-if="holidaysFor[item.id] > 0">{{holidaysFor[item.id]}}</span>
+          <span class="holidays-count" ng-if="holidays[item.id] > 0">{{holidays[item.id]}}</span>
         <div class="inner">
           <div class="arabic">{{item .alternativeName || item.arabicName}}</div>
           <div class="portuguese">{{item.portugueseName}}</div>

@@ -1,0 +1,17 @@
+<ion-view class="day">
+  <ion-header-bar class="bar-energizeda" align-title="center">
+    <h1 id="title" class="title title-center">
+      <a href="{{parentResourceUrl}}">{{day}} {{monthName}} {{year}}</a>
+    </h1>
+  </ion-header-bar>
+
+  <div class="parent">
+    <div class="child">
+      <div class="outer">
+        <div class="inner">
+          {{holidays[day]}}
+        </div>
+      </div>
+    </div>
+  </div>
+</ion-view>
