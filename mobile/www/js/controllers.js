@@ -16,13 +16,13 @@ angular.module('badi-calendar.controllers', [])
   }, false)
 })
 
-.controller('YearCtrl', function($scope, $state, Months, Holidays, DBService) {
+.controller('YearCtrl', function($scope, $state, Months, Holidays, BadiDate, DBService) {
   $scope.resource = 'year'
   $scope.childResource = 'month'
   $scope.year = Number($state.params.year)
   $scope.parentResourceUrl = '#/tab/years/172/months'
 
-  $scope.collection = Months.all()
+  $scope.collection = Months.all($scope.year)
   $scope.holidays = Holidays.load($scope)
 
   $scope.goToSiblingResource = function(increase){
@@ -33,15 +33,15 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('MonthCtrl', function($scope, $state, Months, Days, Holidays, DBService) {
+.controller('MonthCtrl', function($scope, $state, Months, Days, Holidays, BadiDate, DBService) {
   $scope.resource = 'month'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
   $scope.month = Number($state.params.month)
-  $scope.monthName = Months.get($scope.month).arabicName
+  $scope.monthName = Months.get($scope.year, $scope.month).arabicName
   $scope.parentResourceUrl = '#/tab/years/' + $scope.year + '/months'
 
-  $scope.collection = Days.all($scope.month)
+  $scope.collection = Days.all($scope.year, $scope.month)
   $scope.holidays = Holidays.load($scope)
 
   $scope.goToSiblingResource = function(increase){
@@ -66,7 +66,7 @@ angular.module('badi-calendar.controllers', [])
   $scope.year = Number($state.params.year)
   $scope.month = Number($state.params.month)
   $scope.day = Number($state.params.day)
-  $scope.monthName = Months.get($scope.month).arabicName
+  $scope.monthName = Months.get($scope.year, $scope.month).arabicName
   $scope.parentResourceUrl = '#/tab/years/' + $scope.year + '/months/' + $scope.month + '/days'
 
   $scope.holidays = Holidays.load($scope)

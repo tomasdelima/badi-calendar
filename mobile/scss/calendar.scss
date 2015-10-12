@@ -72,9 +72,11 @@
         position: absolute;
         top: 50%;
         left: 50%;
+        width: 100%;
         transform: translate(-50%, -50%);
         -webkit-transform: translate(-50%, -50%);
         -moz-transform: translate(-50%, -50%);
+        text-align: center;
 
         .arabic, .portuguese {
           text-align: center;
@@ -84,6 +86,12 @@
           color: #666;
           font-size: 11px;
           margin-top: 1px;
+        }
+
+        .gregorian {
+          font-size: 9px;
+          margin-top: 5px;
+          color: #5D4B7D;
         }
       }
     }
