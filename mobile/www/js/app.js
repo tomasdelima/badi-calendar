@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'badi-calendar.services' is found in services.js
 // 'badi-calendar.controllers' is found in controllers.js
-angular.module('badi-calendar', ['ionic', 'badi-calendar.controllers', 'badi-calendar.services'])
+angular.module('badi-calendar', ['ionic', 'badi-calendar.controllers', 'badi-calendar.services', 'gapi'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
@@ -21,6 +21,15 @@ angular.module('badi-calendar', ['ionic', 'badi-calendar.controllers', 'badi-cal
       StatusBar.styleLightContent()
     }
   })
+})
+
+.value('GoogleApp', {
+  apiKey: 'YX4RszzV11cqczdHIsUg0qWG',
+  clientId: '884064870980-ikt370il4n4jq8niaa8ujo5epebaj3e8.apps.googleusercontent.com',
+  scopes: [
+    // 'https://www.googleapis.com/auth/calendar',
+    'https://www.googleapis.com/auth/calendar.readonly',
+  ]
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
@@ -69,7 +78,15 @@ angular.module('badi-calendar', ['ionic', 'badi-calendar.controllers', 'badi-cal
     }
   })
 
-  // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/years/172/months')
+  .state('tab.configs', {
+    url: '/configs',
+    views: {
+      'tab-configs': {
+        templateUrl: 'templates/tab-configs.html',
+        controller: 'ConfigsCtrl'
+      }
+    }
+  })
 
+  $urlRouterProvider.otherwise('/tab/years/172/months')
 })

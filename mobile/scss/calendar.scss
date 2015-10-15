@@ -1,3 +1,6 @@
+$theme-color: #8A2BE2;
+$theme-color-dark: #4A00A2;
+
 #title a {
   display: block;
   text-decoration: none;
@@ -14,9 +17,11 @@
   }
 }
 
-.day .parent .child {
-  height: 100%;
-  width: 100%;
+.day, .configs {
+  .parent .child {
+    height: 100%;
+    width: 100%;
+  }
 }
 
 .parent {
@@ -58,13 +63,13 @@
         position: absolute;
         right: -3px;
         top: -3px;
-        width: 20px;
-        height: 20px;
+        min-width: 23px;
+        height: 23px;
         background-color: #8A2BE2;
         color: #FFF;
         border-radius: 18px;
         text-align: center;
-        line-height: 19px;
+        line-height: 22px;
         font-size: 13px;
       }
 
@@ -94,6 +99,24 @@
           color: #5D4B7D;
         }
       }
+    }
+  }
+}
+
+
+.modal-backdrop {
+  background-color: rgba(0,0,0,0.1);
+
+  .outer-modal {
+    position: absolute;
+    left: 15%;
+    right: 15%;
+    top: 15%;
+    bottom: 15%;
+
+    .modal {
+      border-radius: 10px;
+      border: 1px solid $theme-color-dark;
     }
   }
 }

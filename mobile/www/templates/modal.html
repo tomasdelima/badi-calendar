@@ -1,0 +1,12 @@
+<div class='outer-modal'>
+  <ion-modal-view>
+    <ion-header-bar>
+      <h1 class="title">Escolha uma agenda</h1>
+    </ion-header-bar>
+    <ion-content>
+      <div ng-repeat="calendar in calendars">
+        <ion-radio ng-model="calendarId" ng-click="setCalendarId('{{calendar.id}}')" ng-value="'{{calendar.id}}'">{{calendar.summary}}</ion-radio>
+      </div>
+    </ion-content>
+  </ion-modal-view>
+</div>

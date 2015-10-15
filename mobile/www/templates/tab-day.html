@@ -1,5 +1,5 @@
-<ion-view class="day">
-  <ion-header-bar class="bar-energizeda" align-title="center">
+<ion-view class="day" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">
+  <ion-header-bar class="" align-title="center">
     <h1 id="title" class="title title-center">
       <a href="{{parentResourceUrl}}">{{day}} {{monthName}} {{year}}</a>
     </h1>

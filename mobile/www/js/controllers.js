@@ -23,7 +23,7 @@ angular.module('badi-calendar.controllers', [])
   $scope.parentResourceUrl = '#/tab/years/172/months'
 
   $scope.collection = Months.all($scope.year)
-  $scope.holidays = Holidays.load($scope)
+  Holidays.load($scope)
 
   $scope.goToSiblingResource = function(increase){
     $state.go('tab.year', {year: $scope.year + increase})
@@ -60,7 +60,7 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('DayCtrl', function($scope, $state, Months, Days, Holidays, DBService) {
+.controller('DayCtrl', function($scope, $state, Months, Days, Holidays, Calendar, GAPI, DBService) {
   $scope.resource = 'day'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
@@ -77,5 +77,131 @@ angular.module('badi-calendar.controllers', [])
     var newYear = $scope.year
     $state.go('tab.day', {year: newYear, month: newMonth, day: newDay})
   }
-
 })
+
+
+
+
+
+
+
+
+
+
+.controller('ConfigsCtrl', function($scope, $state, $ionicModal, Months, Days, Holidays, Calendar, GAPI, DBService) {
+  $scope.cliendId = '884064870980-ikt370il4n4jq8niaa8ujo5epebaj3e8.apps.googleusercontent.com'
+  $scope.scopes = ["https://www.googleapis.com/auth/calendar.readonly"]
+  $scope.authStatus = 'authorizing'
+
+  angular.element(document).ready(function() {
+    $scope.authorize(true)
+  })
+
+  $scope.authorize = function(immediate) {
+    console.log('GAPI: authorizing')
+    $scope.authStatus = 'authorizing'
+    gapi.auth.authorize({
+      client_id: $scope.cliendId,
+      scope: $scope.scopes,
+      immediate: immediate
+    }).then($scope.onceAuthorized, $scope.onceUnauthorized)
+  }
+
+  $scope.onceAuthorized = function(){
+    console.log('GAPI: authorized')
+    $scope.authStatus = 'authorized'
+    $scope.loadCalendars()
+  }
+
+  $scope.onceUnauthorized = function(){
+    console.log('GAPI: unauthorized')
+    $scope.authStatus = 'unauthorized'
+  }
+
+  $scope.loadCalendars = function() {
+    console.log('GAPI: loading calendars')
+    gapi.client.load('calendar', 'v3')
+    GAPI.init().then(function() {
+      Calendar.listCalendarList().then(function(data) {
+        $scope.calendars = data.items
+        $scope.resolveCalendarId()
+      })
+    })
+  }
+
+  $scope.resolveCalendarId = function() {
+    if(!!localStorage.calendarId) {
+      $scope.calendarId = localStorage.calendarId
+      $scope.calendarName = localStorage.calendarName
+      $scope.loadCalendarEvents()
+    } else {
+      $scope.modal.show()
+    }
+  }
+
+  $scope.setCalendarId = function(calendarId) {
+    $scope.calendarId = localStorage.calendarId = calendarId
+    $scope.calendarName = localStorage.calendarName = $scope.calendars.filter(function(c){
+      return c.id == calendarId
+    })[0].summary
+    $scope.modal.hide()
+    $scope.loadCalendarEvents()
+  }
+
+  $scope.loadCalendarEvents = function() {
+    console.log('GAPI: loading calendar events')
+    Calendar.listEvents($scope.calendarId).then(function(events){
+      $scope.events = []
+
+      events.items.map(function(event){
+        if(event.start && event.summary) {
+          $scope.events.push({
+            name: event.summary,
+            startDate: serializeDate(new Date(event.start.dateTime)),
+            endDate: serializeDate(new Date(event.end.dateTime)),
+          })
+        }
+      })
+      DBService.insertOrUpdateCollection('events', ['name', 'startDate', 'endDate'], $scope.events, [], [], 3)
+    })
+  }
+
+  $ionicModal.fromTemplateUrl('templates/modal.html', {
+    scope: $scope,
+    backdropClickToClose: false,
+    hardwareBackButtonClose: false
+  }).then(function(modal) {
+    $scope.modal = modal
+  })
+
+  $scope.openModal = function() {
+    $scope.modal.show()
+  }
+
+  $scope.closeModal = function() {
+    $scope.modal.hide();
+  }
+
+  $scope.$on('$destroy', function() {
+    $scope.modal.remove();
+  })
+})
+
+
+
+
+serializeDate = function(date){
+  if(date.getFullYear()) {
+    var serializedDate = '' + date.getFullYear()
+    serializedDate += (date.getMonth() < 10) ? '0' + date.getMonth() : date.getMonth()
+    serializedDate += (date.getDate() < 10) ? '0' + date.getDate() : date.getDate()
+    return serializedDate
+  }
+}
+
+deserializeDate = function(serializedDate){
+  var year = serializedDate.slice(0, 4)
+  var month = serializedDate.slice(4, 6)
+  var day = serializedDate.slice(6, 8)
+  return new Date(year, month, day)
+}

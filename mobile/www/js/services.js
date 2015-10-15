@@ -81,7 +81,7 @@ angular.module('badi-calendar.services', [])
   }
 })
 
-.factory('Holidays', function(DBService) {
+.factory('Holidays', function(Events, DBService) {
   return {
     load: function(scope) {
       if(scope.resource == 'year') {
@@ -94,6 +94,7 @@ angular.module('badi-calendar.services', [])
 
       DBService.execute(sqlString, function(r){
         scope.holidays = {}
+
         for(i=0;i<r.rows.length;i++){
           if(scope.resource == 'day') {
             scope.holidays[r.rows.item(i)[scope.childResource]] = r.rows.item(i)
@@ -101,11 +102,33 @@ angular.module('badi-calendar.services', [])
             scope.holidays[r.rows.item(i)[scope.childResource]] = r.rows.item(i).count
           }
         }
-        scope.holidays
+
+        Events.load(scope)
       }, 1)
     }
   }
 })
+
+.factory('Events', function(Months, DBService) {
+  return {
+    load: function(scope) {
+      scope.events = {1:0, 2:0, 3:0, 4:0, 5:0, 6:0, 7:0, 8:0, 9:0, 10:0, 11:0, 12: 0, 13: 0, 14: 0, 15: 0, 16: 0, 17: 0, 18: 0, 19: 0}
+
+      Months.all(scope.year).map(function(month) {
+        var startDate = serializeDate(month.gregorianStart.date)
+        var endDate = serializeDate(month.gregorianEnd.date)
+        var sqlString = "SELECT count(id) as count, substr(startDate,5,2) as month FROM events WHERE startDate >= '" + startDate + "' AND startDate < '" + endDate + "' GROUP BY substr(startDate, 5, 2)"
+
+        DBService.execute(sqlString, function(r){
+          for(i=0;i<r.rows.length;i++){
+            scope.events[Number(r.rows.item(i).month)] += r.rows.item(i).count
+          }
+        }, 1)
+      })
+    }
+  }
+})
+
 
 .factory('BadiDate', function() {
   self = {}
@@ -147,13 +170,63 @@ angular.module('badi-calendar.services', [])
     toGregorian: function(year, month, day) {
       var gregorianDate = self.toGregorian(year, month, day)
       return {
-        year: gregorianDate.getYear() + 1900,
-        month: gregorianDate.getMonth() + 1,
-        day: gregorianDate.getDate()
+        year: gregorianDate.getFullYear(),
+        month: gregorianDate.getMonth(),
+        day: gregorianDate.getDate(),
+        date: gregorianDate,
       }
     }
   }
 })
+
+// .factory('GregorianDate', function() {
+//   self = {}
+
+//   self.toBadi = function(year, month, day) {
+//     if (month > 18) {
+//       return addDays(self.nawRuzDateFor(year + 1844), -self.daysUntilNextNawRuz(month, day))
+//     } else {
+//       return addDays(self.nawRuzDateFor(year + 1843), self.daysSinceLastNawRuz(month, day))
+//     }
+//   }
+
+//   self.daysSinceLastNawRuz = function(month, day) {
+//     return (Number(month.toFixed()) - 1) * 19 + day - 1
+//   }
+
+//   self.daysUntilNextNawRuz = function(month, day) {
+//     if (month == 19) {
+//       return (24 - day)
+//     } else {
+//       return (20 - day)
+//     }
+//   }
+
+//   self.nawRuzDateFor = function(year) {
+//     var nawRuzDay = {2015: 21, 2016: 20, 2017: 20, 2018: 21, 2019: 21, 2020: 20, 2021: 20, 2022: 21, 2023: 21, 2024: 20, 2025: 20, 2026: 21, 2027: 21, 2028: 20, 2029: 20, 2030: 20, 2031: 21, 2032: 20, 2033: 20, 2034: 20, 2035: 21, 2036: 20, 2037: 20, 2038: 20, 2039: 21, 2040: 20, 2041: 20, 2042: 20, 2043: 21, 2044: 20, 2045: 20, 2046: 20, 2047: 21, 2048: 20, 2049: 20, 2050: 20, 2051: 21, 2052: 20, 2053: 20, 2054: 20, 2055: 21, 2056: 20, 2057: 20, 2058: 20, 2059: 20, 2060: 20, 2061: 20, 2062: 20, 2063: 20, 2064: 20}[year]
+//     return new Date(year, 2, nawRuzDay)
+//   }
+
+//   return {
+//     new: function(year, month, day) {
+//       return {
+//         year: year,
+//         month: month,
+//         day: day,
+//         toGregorian: self.toGregorian(year, month, day)
+//       }
+//     },
+//     toGregorian: function(year, month, day) {
+//       var gregorianDate = self.toGregorian(year, month, day)
+//       return {
+//         year: gregorianDate.getYear() + 1900,
+//         month: gregorianDate.getMonth() + 1,
+//         day: gregorianDate.getDate()
+//       }
+//     }
+//   }
+// })
+
 
 .service('DBService', function($http, $state) {
   db = this
@@ -172,8 +245,10 @@ angular.module('badi-calendar.services', [])
     },
     prepareDB: function(callBack){
       db.prepareSchema('holidays', {date: 'date', name: 'string', year: 'integer', month: 'integer', day: 'integer'}, {}, function(){
-        console.log('>> DB Prepared')
-        if(callBack){callBack()}
+        db.prepareSchema('events', {startDate: 'integer', endDate: 'integer', name: 'string'}, {}, function(){
+          console.log('>> DB Prepared')
+          if(callBack){callBack()}
+        })
       })
     },
     prepareSchema: function(table, fieldsObj, defaultValues, callBack){
@@ -328,8 +403,12 @@ angular.module('badi-calendar.services', [])
       console.log('>>>> Recreating DB')
       db.execute('DROP TABLE holidays', function(){
         db.execute('CREATE TABLE holidays ( id integer primary key )', function(){
-          console.log('>>>> DB recreated successfully')
-          if(callBack){callBack()}
+          db.execute('DROP TABLE events', function(){
+            db.execute('CREATE TABLE events ( id integer primary key )', function(){
+              console.log('>>>> DB recreated successfully')
+              if(callBack){callBack()}
+            })
+          })
         })
       })
     }
