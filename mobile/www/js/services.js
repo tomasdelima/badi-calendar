@@ -29,6 +29,9 @@ angular.module('badi-calendar.services', [])
   return {
     all: function(year) { return months(year) },
     get: function(year, id) {
+      if (id == 0) id = 20
+      if (id == 21) id = 1
+
       return months(year).filter(function(month){
         return month.id == id
       })[0]

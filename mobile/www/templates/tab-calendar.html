@@ -1,4 +1,4 @@
-<ion-view class="year-month" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">
+<ion-view class="year-month" on-drag-right="goToSiblingResource(-1)" on-drag-left="goToSiblingResource(+1)" on-drag-down="goToParentResource()">
   <ion-header-bar class="" align-title="center">
     <h1 id="title" class="title title-center">
       <a href="{{parentResourceUrl}}">{{monthName}} {{year}}</a>
@@ -7,14 +7,17 @@
 
   <div class="parent" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">
     <a class="child" href="" ng-click="goToSiblingResource(-1)">
-      <div class="outer">
-        <div class="inner ion-android-arrow-back"></div>
+      <div class="card">
+        <strong class="inner">
+          <i class="ion-ios-arrow-back"></i>
+          {{previousResource}}
+        </strong>
       </div>
     </a>
 
     <a class="child {{item.htmlClass}}" ng-repeat="item in collection" ng-click="goToChildResource(item.id)">
-      <div class="outer">
           <span class="holidays-count" ng-if="holidays[item.id] > 0 || events[item.id] > 0">{{holidays[item.id] + events[item.id]}}</span>
+      <div class="card">
         <div class="inner" ng-if="resource=='year'">
           <div class="arabic">{{item .alternativeName || item.arabicName}}</div>
           <div class="portuguese">{{item.portugueseName}}</div>
@@ -28,8 +31,11 @@
     </a>
 
     <a class="child" href="" ng-click="goToSiblingResource(+1)">
-      <div class="outer">
-        <div class="inner ion-android-arrow-forward"></div>
+      <div class="card">
+        <strong class="inner">
+          {{nextResource}}
+          <i class="ion-ios-arrow-forward"></i>
+        </strong>
       </div>
     </a>
   </div>

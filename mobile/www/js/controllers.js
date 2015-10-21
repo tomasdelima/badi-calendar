@@ -16,16 +16,19 @@ angular.module('badi-calendar.controllers', [])
   }, false)
 })
 
-.controller('YearCtrl', function($scope, $state, Months, Holidays, BadiDate, DBService) {
+.controller('YearCtrl', function($scope, $state, $ionicViewSwitcher, Months, Holidays, BadiDate, DBService) {
   $scope.resource = 'year'
   $scope.childResource = 'month'
   $scope.year = Number($state.params.year)
   $scope.parentResourceUrl = '#/tab/years/172/months'
+  $scope.previousResource = $scope.year - 1
+  $scope.nextResource = $scope.year + 1
 
   $scope.collection = Months.all($scope.year)
   Holidays.load($scope)
 
   $scope.goToSiblingResource = function(increase){
+    $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
     $state.go('tab.year', {year: $scope.year + increase})
   }
   $scope.goToChildResource = function(month){
@@ -33,18 +36,24 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('MonthCtrl', function($scope, $state, Months, Days, Holidays, BadiDate, DBService) {
+.controller('MonthCtrl', function($scope, $state,$ionicViewSwitcher, Months, Days, Holidays, BadiDate, DBService) {
   $scope.resource = 'month'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
   $scope.month = Number($state.params.month)
   $scope.monthName = Months.get($scope.year, $scope.month).arabicName
   $scope.parentResourceUrl = '#/tab/years/' + $scope.year + '/months'
+  $scope.previousResource = Months.get($scope.year, $scope.month - 1).arabicName
+  $scope.nextResource = Months.get($scope.year, $scope.month + 1).arabicName
 
   $scope.collection = Days.all($scope.year, $scope.month)
   $scope.holidays = Holidays.load($scope)
 
+  $scope.goToParentResource = function(){
+    $state.go('tab.year', {year: $scope.year})
+  }
   $scope.goToSiblingResource = function(increase){
+    $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
     var newMonth = $scope.month + increase
     var newYear = $scope.year
 
@@ -60,7 +69,7 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('DayCtrl', function($scope, $state, Months, Days, Holidays, Calendar, GAPI, DBService) {
+.controller('DayCtrl', function($scope, $state, $ionicViewSwitcher, Months, Days, Holidays, Calendar, GAPI, DBService) {
   $scope.resource = 'day'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
@@ -71,7 +80,11 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.holidays = Holidays.load($scope)
 
+  $scope.goToParentResource = function(){
+    $state.go('tab.month', {year: $scope.year, month: $scope.month})
+  }
   $scope.goToSiblingResource = function(increase){
+    $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
     var newDay = $scope.day + increase
     var newMonth = $scope.month
     var newYear = $scope.year
@@ -188,7 +201,13 @@ angular.module('badi-calendar.controllers', [])
 })
 
 
-
+nextSlideDirection = function(increase) {
+  if (increase > 0) {
+    return 'forward'
+  } else if (increase < 0) {
+    return 'back'
+  }
+}
 
 serializeDate = function(date){
   if(date.getFullYear()) {
