@@ -29,7 +29,8 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.goToSiblingResource = function(increase){
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
-    $state.go('tab.year', {year: $scope.year + increase})
+    if ($scope.year + increase >= 172)
+      $state.go('tab.year', {year: $scope.year + increase})
   }
   $scope.goToChildResource = function(month){
     $state.go('tab.month', {year: $scope.year, month: month})
@@ -54,15 +55,13 @@ angular.module('badi-calendar.controllers', [])
   }
   $scope.goToSiblingResource = function(increase){
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
-    var newMonth = $scope.month + increase
-    var newYear = $scope.year
+    $scope.newMonth = $scope.month + increase
+    $scope.newYear = $scope.year
 
-    if (newMonth == 0 || newMonth == 21) {
-      newYear += newMonth * 2 / 21 - 1
-      newMonth = Math.abs(20 - newMonth)
-    }
+    correctMonth($scope)
 
-    $state.go('tab.month', {year: newYear, month: newMonth})
+    if ($scope.newYear >= 172)
+      $state.go('tab.month', {year: $scope.newYear, month: $scope.newMonth})
   }
   $scope.goToChildResource = function(day){
     $state.go('tab.day', {year: $scope.year, month: $scope.month, day: day})
@@ -85,21 +84,17 @@ angular.module('badi-calendar.controllers', [])
   }
   $scope.goToSiblingResource = function(increase){
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
-    var newDay = $scope.day + increase
-    var newMonth = $scope.month
-    var newYear = $scope.year
-    $state.go('tab.day', {year: newYear, month: newMonth, day: newDay})
+    $scope.newDay = $scope.day + increase
+    $scope.newMonth = $scope.month
+    $scope.newYear = $scope.year
+
+    correctDay($scope)
+    correctMonth($scope)
+
+    if ($scope.newYear >= 172)
+      $state.go('tab.day', {year: $scope.newYear, month: $scope.newMonth, day: $scope.newDay})
   }
 })
-
-
-
-
-
-
-
-
-
 
 .controller('ConfigsCtrl', function($scope, $state, $ionicModal, Months, Days, Holidays, Calendar, GAPI, DBService) {
   $scope.cliendId = '884064870980-ikt370il4n4jq8niaa8ujo5epebaj3e8.apps.googleusercontent.com'
@@ -200,6 +195,20 @@ angular.module('badi-calendar.controllers', [])
   })
 })
 
+correctDay = function (scope) {
+  if (scope.newDay == 0 || scope.newDay == 20) {
+    scope.newDay = Math.abs(19 - scope.newDay)
+    scope.newMonth -= (scope.newDay - 10) / 9
+  }
+}
+
+correctMonth = function (scope) {
+  console.log(scope.newMonth)
+  if (scope.newMonth == 0 || scope.newMonth == 21) {
+    scope.newYear += scope.newMonth * 2 / 21 - 1
+    scope.newMonth = Math.abs(20 - scope.newMonth)
+  }
+}
 
 nextSlideDirection = function(increase) {
   if (increase > 0) {

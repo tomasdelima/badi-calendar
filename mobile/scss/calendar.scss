@@ -89,6 +89,10 @@ $theme-color-darker: #301934;
         -moz-transform: translate(-50%, -50%);
         text-align: center;
 
+        &.invalid-resource {
+          color: #999;
+        }
+
         i::before {
           position: relative;
           font-size: 25px;

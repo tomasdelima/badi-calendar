@@ -8,7 +8,7 @@
   <div class="parent" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">
     <a class="child" href="" ng-click="goToSiblingResource(-1)">
       <div class="card">
-        <strong class="inner">
+        <strong class="inner {{year == 172 ? 'invalid-resource' : ''}}">
           <i class="ion-ios-arrow-back"></i>
           {{previousResource}}
         </strong>
