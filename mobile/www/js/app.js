@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'badi-calendar.services' is found in services.js
 // 'badi-calendar.controllers' is found in controllers.js
-angular.module('badi-calendar', ['ionic', 'badi-calendar.controllers', 'badi-calendar.services', 'gapi'])
+angular.module('badi-calendar', ['ionic', 'ngCordova', 'badi-calendar.controllers', 'badi-calendar.services', 'gapi'])
 
 .run(function($ionicPlatform) {
   $ionicPlatform.ready(function() {
