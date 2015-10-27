@@ -37,7 +37,7 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('MonthCtrl', function($scope, $state,$ionicViewSwitcher, Months, Days, Holidays, BadiDate, DBService) {
+.controller('MonthCtrl', function($scope, $state, $ionicViewSwitcher, ngAudio, Months, Days, Holidays, BadiDate, DBService) {
   $scope.resource = 'month'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
@@ -65,6 +65,9 @@ angular.module('badi-calendar.controllers', [])
   }
   $scope.goToChildResource = function(day){
     $state.go('tab.day', {year: $scope.year, month: $scope.month, day: day})
+  }
+  $scope.hearMonth = function() {
+    ngAudio.load('media/Dolphin2.mp3').play()
   }
 })
 
@@ -113,7 +116,7 @@ angular.module('badi-calendar.controllers', [])
   $scope.authStatus = 'authorizing'
 
   angular.element(document).ready(function() {
-    $scope.authorize(true)
+    // $scope.authorize(true)
   })
 
   $scope.authorize = function(immediate) {

@@ -8,6 +8,13 @@ $theme-color-darker: #301934;
   text-decoration: none;
 }
 
+#hear-month {
+  font-size: 25px;
+  margin-right: 16px;
+  width: 30px;
+  left: auto;
+}
+
 .platform-android .parent { padding: 93px 0 5px }
 .year-month .parent .child {
   height: calc(100%/7);
