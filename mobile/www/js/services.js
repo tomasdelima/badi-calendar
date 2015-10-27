@@ -230,6 +230,33 @@ angular.module('badi-calendar.services', [])
 //   }
 // })
 
+.service('Notifications', function(Months, BadiDate, $cordovaLocalNotification) {
+  registerNineteenDaysFeastNotification = function (monthId, date,antecedence) {
+    $cordovaLocalNotification.schedule({
+      id: monthId,
+      led: '8A2BE2',
+      at: date.getTime() - antecedence * 24 * 60 * 60 * 1000,
+      title: 'Lembrete para próxima Festa de Dezenove Dias',
+      text: 'Próxima Festa: ' + Months.get(172, monthId).arabicName + ' (' + Months.get(172, monthId).portugueseName + '), dia ' + date.toLocaleString('pt-BR').slice(0, 10),
+      data: {
+        customProperty: 'custom value'
+      }
+    })
+  }
+
+  scheduleNextNineteenDaysFeastNotification = function (feastName, antecedence) {
+    for (i = 1; i <= 19; i++) {
+      var date = BadiDate.new(172, i, 1).toGregorian
+      if (date.getTime() > new Date().getTime()) {
+        registerNineteenDaysFeastNotification(i, date, antecedence)
+      }
+    }
+  }
+
+  return {
+    scheduleNextNineteenDaysFeastNotification: scheduleNextNineteenDaysFeastNotification
+  }
+})
 
 .service('DBService', function($http, $state) {
   db = this

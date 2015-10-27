@@ -1,22 +1,33 @@
 <ion-view class="configs">
   <ion-content>
-    <div ng-show="authStatus == 'authorizing'">
-      <span>Verificando acesso ao Google Agenda</span>
-      <ion-spinner></ion-spinner>
-    </div>
-    <div ng-show="authStatus == 'authorized'">
-      <span>Conectado com o Google Agenda: {{calendarName}}</span>
-      <span class="ion-android-done"></span>
-    </div>
-    <div ng-show="authStatus == 'unauthorized'">
-      <span>Acesse sua conta Google Agenda</span>
-      <button ng-click="authorize(false)">Acessar</button>
-    </div>
+    <!-- <div class="google-calendar">
+      <div ng-show="authStatus == 'authorizing'">
+        <span>Verificando acesso ao Google Agenda</span>
+        <ion-spinner></ion-spinner>
+      </div>
+      <div ng-show="authStatus == 'authorized'">
+        <span>Conectado com o Google Agenda: {{calendarName}}</span>
+        <span class="ion-android-done"></span>
+      </div>
+      <div ng-show="authStatus == 'unauthorized'">
+        <span>Acesse sua conta Google Agenda</span>
+        <button ng-click="authorize(false)">Acessar</button>
+      </div>
 
-    <div ng-repeat="event in events">
-      {{event}}
-      {{}}
-      {{}}
+      <div ng-repeat="event in events">
+        {{event}}
+        {{}}
+        {{}}
+      </div>
+    </div> -->
+
+    <div class="ndf-notifications">
+      <ion-toggle class="" toggle-class="toggle-balanced" ng-model="notifyNineteenDaysFeast" ng-true-value="1" ng-false-value="0" ng-click="toggleNotifyNineteenDaysFeast()">Notificar próxima Festa?</ion-toggle>
+      <div class="item range notification-antecedence" ng-show="notifyNineteenDaysFeast">
+        <span class="">Antecedência:</span>
+        <input type="range" name="" min="0" max="18" ng-change="setNotificationAntecedence(this)" ng-model="notificationAntecedence">
+        <span class="">{{notificationAntecedence}}</span>
+      </div>
     </div>
   </ion-content>
 </ion-view>

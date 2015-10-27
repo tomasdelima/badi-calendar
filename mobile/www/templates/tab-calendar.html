@@ -21,7 +21,7 @@
         <div class="inner" ng-if="resource=='year'">
           <div class="arabic">{{item .alternativeName || item.arabicName}}</div>
           <div class="portuguese">{{item.portugueseName}}</div>
-          <div class="gregorian" ng-if="item.id != 19">{{item.gregorianStart.day}}/{{item.gregorianStart.month}} - {{item.gregorianEnd.day}}/{{item.gregorianEnd.month}}</div>
+          <div class="gregorian" ng-if="item.id != 19">{{item.gregorianStart.day}}/{{item.gregorianStart.month + 1}} - {{item.gregorianEnd.day}}/{{item.gregorianEnd.month + 1}}</div>
         </div>
         <div class="inner" ng-if="resource=='month'">
           <div class="day-number">{{item.dayNumber}}</div>

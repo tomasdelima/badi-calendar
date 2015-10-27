@@ -96,7 +96,18 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('ConfigsCtrl', function($scope, $state, $ionicModal, Months, Days, Holidays, Calendar, GAPI, DBService) {
+.controller('ConfigsCtrl', function($scope, $state, $ionicModal, Months, Days, Holidays, Notifications, Calendar, GAPI, DBService) {
+  $scope.notifyNineteenDaysFeast = Number(localStorage.notifyNineteenDaysFeast) || 0
+  $scope.toggleNotifyNineteenDaysFeast = function() {
+    $scope.notifyNineteenDaysFeast = localStorage.notifyNineteenDaysFeast = 1 - Number($scope.notifyNineteenDaysFeast)
+  }
+
+  $scope.notificationAntecedence = Number(localStorage.notificationAntecedence) || 1
+  $scope.setNotificationAntecedence = function(self) {
+    $scope.notificationAntecedence = localStorage.notificationAntecedence = self.notificationAntecedence
+    Notifications.scheduleNextNineteenDaysFeastNotification('name', $scope.notificationAntecedence)
+  }
+
   $scope.cliendId = '884064870980-ikt370il4n4jq8niaa8ujo5epebaj3e8.apps.googleusercontent.com'
   $scope.scopes = ["https://www.googleapis.com/auth/calendar.readonly"]
   $scope.authStatus = 'authorizing'
@@ -203,7 +214,6 @@ correctDay = function (scope) {
 }
 
 correctMonth = function (scope) {
-  console.log(scope.newMonth)
   if (scope.newMonth == 0 || scope.newMonth == 21) {
     scope.newYear += scope.newMonth * 2 / 21 - 1
     scope.newMonth = Math.abs(20 - scope.newMonth)
