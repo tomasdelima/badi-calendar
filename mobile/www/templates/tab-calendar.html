@@ -3,7 +3,7 @@
     <h1 id="title" class="title title-center">
       <a href="{{parentResourceUrl}}">{{monthName}} {{year}}</a>
     </h1>
-    <span id="hear-month" class="title title-right icon ion-android-volume-up" ng-if="month" ng-click="hearMonth()"/>
+    <span id="hear-month" class="title title-right icon ion-android-volume-up" ng-if="month" ng-click="monthSound.play()"/>
   </ion-header-bar>
 
   <div class="parent" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">

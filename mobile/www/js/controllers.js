@@ -49,6 +49,7 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.collection = Days.all($scope.year, $scope.month)
   $scope.holidays = Holidays.load($scope)
+  $scope.monthSound = ngAudio.load('media/' + Months.get($scope.year, $scope.month).slug + '.mp3')
 
   $scope.goToParentResource = function(){
     $state.go('tab.year', {year: $scope.year})
@@ -65,9 +66,6 @@ angular.module('badi-calendar.controllers', [])
   }
   $scope.goToChildResource = function(day){
     $state.go('tab.day', {year: $scope.year, month: $scope.month, day: day})
-  }
-  $scope.hearMonth = function() {
-    ngAudio.load('media/Dolphin2.mp3').play()
   }
 })
 

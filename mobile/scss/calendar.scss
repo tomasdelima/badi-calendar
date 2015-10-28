@@ -10,9 +10,14 @@ $theme-color-darker: #301934;
 
 #hear-month {
   font-size: 25px;
-  margin-right: 16px;
-  width: 30px;
+  width: 42px;
   left: auto;
+  margin: 0;
+  text-align: center;
+
+  &.activated {
+    color: $theme-color;
+  }
 }
 
 .platform-android .parent { padding: 93px 0 5px }

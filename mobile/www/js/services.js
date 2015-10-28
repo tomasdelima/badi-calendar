@@ -3,26 +3,26 @@ angular.module('badi-calendar.services', [])
 .factory('Months', function(BadiDate) {
   var months = function(year) {
     return [
-      {id: 1,  monthNumber: 1,    gregorianStart: BadiDate.toGregorian(year, 1,  1), gregorianEnd: BadiDate.toGregorian(year, 1,  19), arabicName: "Bahá",      portugueseName: "Esplendor"},
-      {id: 2,  monthNumber: 2,    gregorianStart: BadiDate.toGregorian(year, 2,  1), gregorianEnd: BadiDate.toGregorian(year, 2,  19), arabicName: "Jalál",     portugueseName: "Glória"},
-      {id: 3,  monthNumber: 3,    gregorianStart: BadiDate.toGregorian(year, 3,  1), gregorianEnd: BadiDate.toGregorian(year, 3,  19), arabicName: "Jamál",     portugueseName: "Beleza"},
-      {id: 4,  monthNumber: 4,    gregorianStart: BadiDate.toGregorian(year, 4,  1), gregorianEnd: BadiDate.toGregorian(year, 4,  19), arabicName: "‘Aẓamat",   portugueseName: "Grandeza"},
-      {id: 5,  monthNumber: 5,    gregorianStart: BadiDate.toGregorian(year, 5,  1), gregorianEnd: BadiDate.toGregorian(year, 5,  19), arabicName: "Núr",       portugueseName: "Luz"},
-      {id: 6,  monthNumber: 6,    gregorianStart: BadiDate.toGregorian(year, 6,  1), gregorianEnd: BadiDate.toGregorian(year, 6,  19), arabicName: "Raḥmat",    portugueseName: "Miséricórdia"},
-      {id: 7,  monthNumber: 7,    gregorianStart: BadiDate.toGregorian(year, 7,  1), gregorianEnd: BadiDate.toGregorian(year, 7,  19), arabicName: "Kalimát",   portugueseName: "Palavras"},
-      {id: 8,  monthNumber: 8,    gregorianStart: BadiDate.toGregorian(year, 8,  1), gregorianEnd: BadiDate.toGregorian(year, 8,  19), arabicName: "Kamál",     portugueseName: "Perfeição"},
-      {id: 9,  monthNumber: 9,    gregorianStart: BadiDate.toGregorian(year, 9,  1), gregorianEnd: BadiDate.toGregorian(year, 9,  19), arabicName: "Asmá’",     portugueseName: "Nomes"},
-      {id: 10, monthNumber: 10,   gregorianStart: BadiDate.toGregorian(year, 10, 1), gregorianEnd: BadiDate.toGregorian(year, 10, 19), arabicName: "‘Izzat",    portugueseName: "Potência"},
-      {id: 11, monthNumber: 11,   gregorianStart: BadiDate.toGregorian(year, 11, 1), gregorianEnd: BadiDate.toGregorian(year, 11, 19), arabicName: "Mashíyyat", portugueseName: "Vontade"},
-      {id: 12, monthNumber: 12,   gregorianStart: BadiDate.toGregorian(year, 12, 1), gregorianEnd: BadiDate.toGregorian(year, 12, 19), arabicName: "‘Ilm",      portugueseName: "Conhecimento"},
-      {id: 13, monthNumber: 13,   gregorianStart: BadiDate.toGregorian(year, 13, 1), gregorianEnd: BadiDate.toGregorian(year, 13, 19), arabicName: "Qudrat",    portugueseName: "Poder"},
-      {id: 14, monthNumber: 14,   gregorianStart: BadiDate.toGregorian(year, 14, 1), gregorianEnd: BadiDate.toGregorian(year, 14, 19), arabicName: "Qawl",      portugueseName: "Discurso"},
-      {id: 15, monthNumber: 15,   gregorianStart: BadiDate.toGregorian(year, 15, 1), gregorianEnd: BadiDate.toGregorian(year, 15, 19), arabicName: "Masá’il",   portugueseName: "Perguntas"},
-      {id: 16, monthNumber: 16,   gregorianStart: BadiDate.toGregorian(year, 16, 1), gregorianEnd: BadiDate.toGregorian(year, 16, 19), arabicName: "Sharaf",    portugueseName: "Honra"},
-      {id: 17, monthNumber: 17,   gregorianStart: BadiDate.toGregorian(year, 17, 1), gregorianEnd: BadiDate.toGregorian(year, 17, 19), arabicName: "Sulṭán",    portugueseName: "Soberania"},
-      {id: 18, monthNumber: 18,   gregorianStart: BadiDate.toGregorian(year, 18, 1), gregorianEnd: BadiDate.toGregorian(year, 18, 19), arabicName: "Mulk",      portugueseName: "Domínio",     htmlClass: "around-ayyamiha"},
-      {id: 19, monthNumber: 18.5, gregorianStart: BadiDate.toGregorian(year, 19, 1), gregorianEnd: BadiDate.toGregorian(year, 19, 19), arabicName: "Ayyám-i-Há", alternativeName: "5",         htmlClass: "ayyamiha"},
-      {id: 20, monthNumber: 19,   gregorianStart: BadiDate.toGregorian(year, 20, 1), gregorianEnd: BadiDate.toGregorian(year, 20, 19), arabicName: "‘Alá’",     portugueseName: "Sublimidade", htmlClass: "around-ayyamiha"},
+      {id: 1,  monthNumber: 1,    gregorianStart: BadiDate.toGregorian(year, 1,  1), gregorianEnd: BadiDate.toGregorian(year, 1,  19), slug: "baha",       arabicName: "Bahá",      portugueseName: "Esplendor"},
+      {id: 2,  monthNumber: 2,    gregorianStart: BadiDate.toGregorian(year, 2,  1), gregorianEnd: BadiDate.toGregorian(year, 2,  19), slug: "jalal",      arabicName: "Jalál",     portugueseName: "Glória"},
+      {id: 3,  monthNumber: 3,    gregorianStart: BadiDate.toGregorian(year, 3,  1), gregorianEnd: BadiDate.toGregorian(year, 3,  19), slug: "jamal",      arabicName: "Jamál",     portugueseName: "Beleza"},
+      {id: 4,  monthNumber: 4,    gregorianStart: BadiDate.toGregorian(year, 4,  1), gregorianEnd: BadiDate.toGregorian(year, 4,  19), slug: "azamat",     arabicName: "‘Aẓamat",   portugueseName: "Grandeza"},
+      {id: 5,  monthNumber: 5,    gregorianStart: BadiDate.toGregorian(year, 5,  1), gregorianEnd: BadiDate.toGregorian(year, 5,  19), slug: "nur",        arabicName: "Núr",       portugueseName: "Luz"},
+      {id: 6,  monthNumber: 6,    gregorianStart: BadiDate.toGregorian(year, 6,  1), gregorianEnd: BadiDate.toGregorian(year, 6,  19), slug: "rahmat",     arabicName: "Raḥmat",    portugueseName: "Miséricórdia"},
+      {id: 7,  monthNumber: 7,    gregorianStart: BadiDate.toGregorian(year, 7,  1), gregorianEnd: BadiDate.toGregorian(year, 7,  19), slug: "kalimat",    arabicName: "Kalimát",   portugueseName: "Palavras"},
+      {id: 8,  monthNumber: 8,    gregorianStart: BadiDate.toGregorian(year, 8,  1), gregorianEnd: BadiDate.toGregorian(year, 8,  19), slug: "kamal",      arabicName: "Kamál",     portugueseName: "Perfeição"},
+      {id: 9,  monthNumber: 9,    gregorianStart: BadiDate.toGregorian(year, 9,  1), gregorianEnd: BadiDate.toGregorian(year, 9,  19), slug: "asma",       arabicName: "Asmá’",     portugueseName: "Nomes"},
+      {id: 10, monthNumber: 10,   gregorianStart: BadiDate.toGregorian(year, 10, 1), gregorianEnd: BadiDate.toGregorian(year, 10, 19), slug: "izzat",      arabicName: "‘Izzat",    portugueseName: "Potência"},
+      {id: 11, monthNumber: 11,   gregorianStart: BadiDate.toGregorian(year, 11, 1), gregorianEnd: BadiDate.toGregorian(year, 11, 19), slug: "mashiyyat",  arabicName: "Mashíyyat", portugueseName: "Vontade"},
+      {id: 12, monthNumber: 12,   gregorianStart: BadiDate.toGregorian(year, 12, 1), gregorianEnd: BadiDate.toGregorian(year, 12, 19), slug: "ilm",        arabicName: "‘Ilm",      portugueseName: "Conhecimento"},
+      {id: 13, monthNumber: 13,   gregorianStart: BadiDate.toGregorian(year, 13, 1), gregorianEnd: BadiDate.toGregorian(year, 13, 19), slug: "qudrat",     arabicName: "Qudrat",    portugueseName: "Poder"},
+      {id: 14, monthNumber: 14,   gregorianStart: BadiDate.toGregorian(year, 14, 1), gregorianEnd: BadiDate.toGregorian(year, 14, 19), slug: "qawl",       arabicName: "Qawl",      portugueseName: "Discurso"},
+      {id: 15, monthNumber: 15,   gregorianStart: BadiDate.toGregorian(year, 15, 1), gregorianEnd: BadiDate.toGregorian(year, 15, 19), slug: "masa-il",    arabicName: "Masá’il",   portugueseName: "Perguntas"},
+      {id: 16, monthNumber: 16,   gregorianStart: BadiDate.toGregorian(year, 16, 1), gregorianEnd: BadiDate.toGregorian(year, 16, 19), slug: "sharaf",     arabicName: "Sharaf",    portugueseName: "Honra"},
+      {id: 17, monthNumber: 17,   gregorianStart: BadiDate.toGregorian(year, 17, 1), gregorianEnd: BadiDate.toGregorian(year, 17, 19), slug: "sultan",     arabicName: "Sulṭán",    portugueseName: "Soberania"},
+      {id: 18, monthNumber: 18,   gregorianStart: BadiDate.toGregorian(year, 18, 1), gregorianEnd: BadiDate.toGregorian(year, 18, 19), slug: "mulk",       arabicName: "Mulk",      portugueseName: "Domínio",     htmlClass: "around-ayyamiha"},
+      {id: 19, monthNumber: 18.5, gregorianStart: BadiDate.toGregorian(year, 19, 1), gregorianEnd: BadiDate.toGregorian(year, 19, 19), slug: "ayyam-i-ha", arabicName: "Ayyám-i-Há", alternativeName: "5",         htmlClass: "ayyamiha"},
+      {id: 20, monthNumber: 19,   gregorianStart: BadiDate.toGregorian(year, 20, 1), gregorianEnd: BadiDate.toGregorian(year, 20, 19), slug: "ala",        arabicName: "‘Alá’",     portugueseName: "Sublimidade", htmlClass: "around-ayyamiha"},
     ]
   }
 
@@ -131,7 +131,6 @@ angular.module('badi-calendar.services', [])
     }
   }
 })
-
 
 .factory('BadiDate', function() {
   self = {}
