@@ -37,7 +37,7 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('MonthCtrl', function($scope, $state, $ionicViewSwitcher, ngAudio, Months, Days, Holidays, BadiDate, DBService) {
+.controller('MonthCtrl', function($scope, $state, $ionicViewSwitcher, Months, Days, Holidays, BadiDate, Media, DBService) {
   $scope.resource = 'month'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
@@ -49,7 +49,11 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.collection = Days.all($scope.year, $scope.month)
   $scope.holidays = Holidays.load($scope)
-  $scope.monthSound = ngAudio.load('media/' + Months.get($scope.year, $scope.month).slug + '.mp3')
+  Media.loadMedia('media/' + Months.get($scope.year, $scope.month).slug + '.mp3').then(function(media) {
+    $scope.monthSound = media
+  })
+  $scope.playAudio = function() {
+  }
 
   $scope.goToParentResource = function(){
     $state.go('tab.year', {year: $scope.year})

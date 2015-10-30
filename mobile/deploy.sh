@@ -1,5 +1,5 @@
 source ~/.bash_profile
-cd ~/Projects/badi-calendar/mobile
+cd ~/Projects/badi-calendar/mobile/platforms/android/build/outputs/apk/
 
 # Add key to deploy
   # keytool -genkey -v -keystore my-release-key.keystore -alias alias_name -keyalg RSA -keysize 2048 -validity 10000
@@ -8,7 +8,8 @@ cd ~/Projects/badi-calendar/mobile
   ionic build android --release
 
 # Sign APK
-  jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore platforms/android/ant-build/CordovaApp-release-unsigned.apk alias_name
+  jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore my-release-key.keystore android-release-unsigned.apk alias_name
 
 # Zipalign the APK
-  ~/Custom\ programs/android-sdk-linux/build-tools/20.0.0/zipalign -v 4 platforms/android/ant-build/CordovaApp-release-unsigned.apk platforms/android/ant-build/BadiCalendar.apk
+  mv BadiCalendar.apk BadiCalendar-old.apk
+  zipalign -v 4 android-release-unsigned.apk BadiCalendar.apk
