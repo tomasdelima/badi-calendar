@@ -223,31 +223,59 @@ angular.module('badi-calendar.services', [])
   }
 })
 
-.service('Notifications', function (Months, BadiDate, $cordovaLocalNotification) {
-  registerNineteenDaysFeastNotification = function (monthId, date,antecedence) {
+.service('Notifications', function (Months, BadiDate, DBService, $cordovaLocalNotification) {
+  registerNineteenDaysFeastNotification = function (monthId, date, antecedence) {
     $cordovaLocalNotification.schedule({
       id: monthId,
       led: '8A2BE2',
       at: date.getTime() - antecedence * dayDuration,
       title: 'Lembrete para próxima Festa de Dezenove Dias',
       text: 'Próxima Festa: ' + Months.get(172, monthId).arabicName + ' (' + Months.get(172, monthId).portugueseName + '), dia ' + date.toLocaleString('pt-BR').slice(0, 10),
-      data: {
-        customProperty: 'custom value'
-      }
     })
   }
 
-  scheduleNextNineteenDaysFeastNotification = function (feastName, antecedence) {
-    for (i = 1; i <= 19; i++) {
-      var date = BadiDate.new(172, i, 1).toGregorian
-      if (date.getTime() > new Date().getTime()) {
-        registerNineteenDaysFeastNotification(i, date, antecedence)
+  registerHolidayNotification = function (holiday, antecedence) {
+    var date = new Date(holiday.date)
+    var dateString = date.getUTCDate() + '/' + (date.getUTCMonth() + 1) + '/' + date.getUTCFullYear()
+
+    $cordovaLocalNotification.schedule({
+      id: holiday.date,
+      led: '8A2BE2',
+      at: date.getTime() - antecedence * dayDuration,
+      title: 'Lembrete para próximo dia sagrado',
+      text: 'Próximo dia sagrado: ' + holiday.name + ', dia ' + dateString,
+    })
+  }
+
+  scheduleNextNineteenDaysFeastsNotifications = function (antecedence) {
+    for (year = 172; year < 182; year++) {
+      for (month = 1; month <= 19; month++) {
+        var date = BadiDate.new(year, month, 1).toGregorian
+        if (window.cordova && date.getTime() > new Date().getTime()) {
+          registerNineteenDaysFeastNotification(month, date, antecedence)
+        }
       }
     }
   }
 
+  scheduleNextHolidaysNotifications = function (antecedence) {
+    holidays = []
+    DBService.insertIntoCollection('SELECT date, name, year, month, day FROM holidays WHERE date != "" AND year < 182 ORDER BY date', holidays, function () {
+      holidays.forEach(function(holiday) {
+        if (window.cordova && holiday.date.getTime() > new Date().getTime()) {
+          registerHolidayNotification(holiday, antecedence)
+        }
+      })
+    })
+  }
+
+  scheduleNotifications = function (antecedence) {
+    scheduleNextNineteenDaysFeastsNotifications(antecedence)
+    scheduleNextHolidaysNotifications(antecedence)
+  }
+
   return {
-    scheduleNextNineteenDaysFeastNotification: scheduleNextNineteenDaysFeastNotification
+    scheduleNotifications: scheduleNotifications
   }
 })
 
@@ -443,6 +471,17 @@ angular.module('badi-calendar.services', [])
       })
 
       db.executeTransaction(array, undefined, undefined, verbose)
+    },
+    insertIntoCollection: function (sqlString, collection, callBack, verbose) {
+      array = []
+
+      db.execute(sqlString, function (r) {
+        for (i = 0; i < r.rows.length; i++) {
+          collection.push(r.rows.item(i))
+        }
+
+        if (callBack) callBack()
+      }, verbose)
     },
     delete: function (table, ids, verbose) {
       var sqlString = 'delete from ' + table + (ids ? ' where id in (' + ids + ')' : '')

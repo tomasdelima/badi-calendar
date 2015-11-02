@@ -7,7 +7,7 @@
 
   <div class="parent">
     <div class="child">
-      <div class="card">
+      <div class="card {{day+'-'+month+'-'+year == today ? 'today' : ''}}">
         <div class="day-field">{{day}}</div>
         <div class="month-year-field">{{monthName}} {{year}}</div>
         <div class="card holiday" ng-if="holidays[day].name">{{holidays[day].name}}</div>

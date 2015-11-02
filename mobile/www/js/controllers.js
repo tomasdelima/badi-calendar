@@ -77,7 +77,7 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('DayCtrl', function($scope, $state, $ionicViewSwitcher, Months, Days, Holidays, Calendar, GAPI, DBService) {
+.controller('DayCtrl', function($scope, $state, $ionicViewSwitcher, Months, Days, Holidays, GregorianDate, Calendar, GAPI, DBService) {
   $scope.resource = 'day'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
@@ -87,6 +87,7 @@ angular.module('badi-calendar.controllers', [])
   $scope.parentResourceUrl = '#/tab/years/' + $scope.year + '/months/' + $scope.month + '/days'
 
   $scope.holidays = Holidays.load($scope)
+  $scope.today = GregorianDate.toBadi(new Date()).toString
 
   $scope.goToParentResource = function() {
     $state.go('tab.month', {year: $scope.year, month: $scope.month})
@@ -106,15 +107,15 @@ angular.module('badi-calendar.controllers', [])
 })
 
 .controller('ConfigsCtrl', function($scope, $state, $ionicModal, Months, Days, Holidays, Notifications, Calendar, GAPI, DBService) {
-  $scope.notifyNineteenDaysFeast = Number(localStorage.notifyNineteenDaysFeast) || 0
-  $scope.toggleNotifyNineteenDaysFeast = function() {
-    $scope.notifyNineteenDaysFeast = localStorage.notifyNineteenDaysFeast = 1 - Number($scope.notifyNineteenDaysFeast)
+  $scope.notifyEvents = Number(localStorage.notifyEvents) || 0
+  $scope.toggleNotifyEvents = function() {
+    $scope.notifyEvents = localStorage.notifyEvents = 1 - Number($scope.notifyEvents)
   }
 
   $scope.notificationAntecedence = Number(localStorage.notificationAntecedence) || 1
   $scope.setNotificationAntecedence = function(self) {
     $scope.notificationAntecedence = localStorage.notificationAntecedence = self.notificationAntecedence
-    Notifications.scheduleNextNineteenDaysFeastNotification('name', $scope.notificationAntecedence)
+    Notifications.scheduleNotifications($scope.notificationAntecedence)
   }
 
   $scope.cliendId = '884064870980-ikt370il4n4jq8niaa8ujo5epebaj3e8.apps.googleusercontent.com'
