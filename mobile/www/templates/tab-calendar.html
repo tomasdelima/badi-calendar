@@ -18,15 +18,15 @@
 
     <a class="child {{item.htmlClass}}" ng-repeat="item in collection" ng-click="goToChildResource(item.id)">
           <span class="holidays-count" ng-if="holidays[item.id] > 0 || events[item.id] > 0">{{holidays[item.id] + events[item.id]}}</span>
-      <div class="card">
+      <div class="card {{item.toString == today ? 'today' : ''}}">
         <div class="inner" ng-if="resource=='year'">
           <div class="arabic">{{item .alternativeName || item.arabicName}}</div>
           <div class="portuguese">{{item.portugueseName}}</div>
-          <div class="gregorian" ng-if="item.id != 19">{{item.gregorianStart.day}}/{{item.gregorianStart.month + 1}} - {{item.gregorianEnd.day}}/{{item.gregorianEnd.month + 1}}</div>
+          <div class="gregorian" ng-if="item.id != 19">{{item.gregorianStart.toShortString()}} - {{item.gregorianEnd.toShortString()}}</div>
         </div>
         <div class="inner" ng-if="resource=='month'">
-          <div class="day-number">{{item.dayNumber}}</div>
-          <div class="gregorian">{{item.toGregorian.day}}/{{item.toGregorian.month + 1}}</div>
+          <div class="day-number">{{item.day}}</div>
+          <div class="gregorian">{{item.toGregorian.toShortString()}}</div>
         </div>
       </div>
     </a>

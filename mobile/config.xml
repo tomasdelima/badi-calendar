@@ -7,7 +7,7 @@
   <author email="tomasdelima@gmail.com" href="http://www.bahai.org.br/">
     Tomás Duringer Jacques de Lima
   </author>
-  <content src="http://192.168.0.181:8100" original-src="index.html"/>
+  <content src="index.html"/>
   <access origin="*"/>
   <preference name="webviewbounce" value="false"/>
   <preference name="UIWebViewBounce" value="false"/>

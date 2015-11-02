@@ -3,7 +3,7 @@ remoteHost = 'http://badi-calendar.herokuapp.com'
 
 angular.module('badi-calendar.controllers', [])
 .controller('AppCtrl', function($scope, DBService) {
-  DBService.load(function(){
+  DBService.load(function() {
     var existingIds = []
     DBService.loadFromRemoteServer(remoteHost + '/holidays', function(data) {
       DBService.execute('select id from holidays', function(results) {
@@ -26,14 +26,14 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.collection = Months.all($scope.year)
   Holidays.load($scope)
-  $scope.toBadi = GregorianDate
+  $scope.today = GregorianDate.toBadi(new Date()).toString.slice(-6)
 
-  $scope.goToSiblingResource = function(increase){
+  $scope.goToSiblingResource = function(increase) {
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
     if ($scope.year + increase >= 172)
       $state.go('tab.year', {year: $scope.year + increase})
   }
-  $scope.goToChildResource = function(month){
+  $scope.goToChildResource = function(month) {
     $state.go('tab.month', {year: $scope.year, month: month})
   }
 })
@@ -51,6 +51,7 @@ angular.module('badi-calendar.controllers', [])
   $scope.collection = Days.all($scope.year, $scope.month)
   $scope.holidays = Holidays.load($scope)
   $scope.toBadi = GregorianDate
+  $scope.today = GregorianDate.toBadi(new Date()).toString
 
   if (window.cordova) {
     Media.loadMedia('media/' + Months.get($scope.year, $scope.month).slug + '.mp3').then(function(media) {
@@ -58,10 +59,10 @@ angular.module('badi-calendar.controllers', [])
     })
   }
 
-  $scope.goToParentResource = function(){
+  $scope.goToParentResource = function() {
     $state.go('tab.year', {year: $scope.year})
   }
-  $scope.goToSiblingResource = function(increase){
+  $scope.goToSiblingResource = function(increase) {
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
     $scope.newMonth = $scope.month + increase
     $scope.newYear = $scope.year
@@ -71,7 +72,7 @@ angular.module('badi-calendar.controllers', [])
     if ($scope.newYear >= 172)
       $state.go('tab.month', {year: $scope.newYear, month: $scope.newMonth})
   }
-  $scope.goToChildResource = function(day){
+  $scope.goToChildResource = function(day) {
     $state.go('tab.day', {year: $scope.year, month: $scope.month, day: day})
   }
 })
@@ -87,10 +88,10 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.holidays = Holidays.load($scope)
 
-  $scope.goToParentResource = function(){
+  $scope.goToParentResource = function() {
     $state.go('tab.month', {year: $scope.year, month: $scope.month})
   }
-  $scope.goToSiblingResource = function(increase){
+  $scope.goToSiblingResource = function(increase) {
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
     $scope.newDay = $scope.day + increase
     $scope.newMonth = $scope.month
@@ -134,13 +135,13 @@ angular.module('badi-calendar.controllers', [])
     }).then($scope.onceAuthorized, $scope.onceUnauthorized)
   }
 
-  $scope.onceAuthorized = function(){
+  $scope.onceAuthorized = function() {
     console.log('GAPI: authorized')
     $scope.authStatus = 'authorized'
     $scope.loadCalendars()
   }
 
-  $scope.onceUnauthorized = function(){
+  $scope.onceUnauthorized = function() {
     console.log('GAPI: unauthorized')
     $scope.authStatus = 'unauthorized'
   }
@@ -157,7 +158,7 @@ angular.module('badi-calendar.controllers', [])
   }
 
   $scope.resolveCalendarId = function() {
-    if(!!localStorage.calendarId) {
+    if (!!localStorage.calendarId) {
       $scope.calendarId = localStorage.calendarId
       $scope.calendarName = localStorage.calendarName
       $scope.loadCalendarEvents()
@@ -168,7 +169,7 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.setCalendarId = function(calendarId) {
     $scope.calendarId = localStorage.calendarId = calendarId
-    $scope.calendarName = localStorage.calendarName = $scope.calendars.filter(function(c){
+    $scope.calendarName = localStorage.calendarName = $scope.calendars.filter(function(c) {
       return c.id == calendarId
     })[0].summary
     $scope.modal.hide()
@@ -177,11 +178,11 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.loadCalendarEvents = function() {
     console.log('GAPI: loading calendar events')
-    Calendar.listEvents($scope.calendarId).then(function(events){
+    Calendar.listEvents($scope.calendarId).then(function(events) {
       $scope.events = []
 
-      events.items.map(function(event){
-        if(event.start && event.summary) {
+      events.items.map(function(event) {
+        if (event.start && event.summary) {
           $scope.events.push({
             name: event.summary,
             startDate: serializeDate(new Date(event.start.dateTime)),
@@ -236,8 +237,8 @@ nextSlideDirection = function(increase) {
   }
 }
 
-serializeDate = function(date){
-  if(date.getFullYear()) {
+serializeDate = function(date) {
+  if (date.getFullYear()) {
     var serializedDate = '' + date.getFullYear()
     serializedDate += (date.getMonth() < 10) ? '0' + date.getMonth() : date.getMonth()
     serializedDate += (date.getDate() < 10) ? '0' + date.getDate() : date.getDate()
@@ -245,7 +246,7 @@ serializeDate = function(date){
   }
 }
 
-deserializeDate = function(serializedDate){
+deserializeDate = function(serializedDate) {
   var year = serializedDate.slice(0, 4)
   var month = serializedDate.slice(4, 6)
   var day = serializedDate.slice(6, 8)

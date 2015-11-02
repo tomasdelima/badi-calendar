@@ -91,6 +91,10 @@ $theme-color-darker: #301934;
       position: relative;
       margin: 5px;
 
+      &.today {
+        border: 1px solid $theme-color-medium;
+      }
+
       .inner {
         position: absolute;
         top: 50%;
