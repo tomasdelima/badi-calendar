@@ -1,3 +1,5 @@
+dayDuration = 24 * 60 * 60 * 1000
+
 angular.module('badi-calendar.services', [])
 
 .factory('Months', function(BadiDate) {
@@ -133,7 +135,7 @@ angular.module('badi-calendar.services', [])
 })
 
 .factory('BadiDate', function() {
-  self = {}
+  var self = {}
 
   self.toGregorian = function(year, month, day) {
     if (month > 18) {
@@ -181,60 +183,70 @@ angular.module('badi-calendar.services', [])
   }
 })
 
-// .factory('GregorianDate', function() {
-//   self = {}
+.factory('GregorianDate', function() {
+  var self = {}
 
-//   self.toBadi = function(year, month, day) {
-//     if (month > 18) {
-//       return addDays(self.nawRuzDateFor(year + 1844), -self.daysUntilNextNawRuz(month, day))
-//     } else {
-//       return addDays(self.nawRuzDateFor(year + 1843), self.daysSinceLastNawRuz(month, day))
-//     }
-//   }
+  self.toBadi = function(year, month, day) {
+    self.date = new Date(year, month, day)
+    self.year = year
+    self.month = month
+    self.day = day
 
-//   self.daysSinceLastNawRuz = function(month, day) {
-//     return (Number(month.toFixed()) - 1) * 19 + day - 1
-//   }
+    return {
+      year: self.badiYear(),
+      month: self.badiMonth(),
+      day: self.badiDay(),
+    }
+  }
 
-//   self.daysUntilNextNawRuz = function(month, day) {
-//     if (month == 19) {
-//       return (24 - day)
-//     } else {
-//       return (20 - day)
-//     }
-//   }
+  self.badiYear = function() {
+    return self.year - (self.beforeNawRuz(self.year) ? 1844 : 1843)
+  }
 
-//   self.nawRuzDateFor = function(year) {
-//     var nawRuzDay = {2015: 21, 2016: 20, 2017: 20, 2018: 21, 2019: 21, 2020: 20, 2021: 20, 2022: 21, 2023: 21, 2024: 20, 2025: 20, 2026: 21, 2027: 21, 2028: 20, 2029: 20, 2030: 20, 2031: 21, 2032: 20, 2033: 20, 2034: 20, 2035: 21, 2036: 20, 2037: 20, 2038: 20, 2039: 21, 2040: 20, 2041: 20, 2042: 20, 2043: 21, 2044: 20, 2045: 20, 2046: 20, 2047: 21, 2048: 20, 2049: 20, 2050: 20, 2051: 21, 2052: 20, 2053: 20, 2054: 20, 2055: 21, 2056: 20, 2057: 20, 2058: 20, 2059: 20, 2060: 20, 2061: 20, 2062: 20, 2063: 20, 2064: 20}[year]
-//     return new Date(year, 2, nawRuzDay)
-//   }
+  self.badiMonth = function() {
+    if (self.daysUntilNextNawRuz() <= 19) {
+      return 20
+    } else {
+      return Math.trunc(self.daysSinceLastNawRuz(self.year, self.month, self.day) / 19) + 1
+    }
+  }
 
-//   return {
-//     new: function(year, month, day) {
-//       return {
-//         year: year,
-//         month: month,
-//         day: day,
-//         toGregorian: self.toGregorian(year, month, day)
-//       }
-//     },
-//     toGregorian: function(year, month, day) {
-//       var gregorianDate = self.toGregorian(year, month, day)
-//       return {
-//         year: gregorianDate.getYear() + 1900,
-//         month: gregorianDate.getMonth() + 1,
-//         day: gregorianDate.getDate()
-//       }
-//     }
-//   }
-// })
+  self.badiDay = function() {
+    if (self.badiMonth() == 20) {
+      return 20 - self.daysUntilNextNawRuz()
+    } else {
+      return Math.round(self.daysSinceLastNawRuz(self.year, self.month, self.day) % 19) + 1
+    }
+  }
+
+  self.daysSinceLastNawRuz = function() {
+    var yearShift = self.beforeNawRuz(self.year) ? 1 : 0
+    return Math.round((self.date - self.nawRuzDateFor(self.year - yearShift)) / dayDuration)
+  }
+
+  self.daysUntilNextNawRuz = function() {
+    var yearShift = self.beforeNawRuz(self.year) ? 0 : 1
+    return Math.round((self.nawRuzDateFor(self.year + yearShift) - self.date) / dayDuration)
+  }
+
+  self.beforeNawRuz = function(year) {
+    return self.date < self.nawRuzDateFor(year)
+  }
+
+  self.nawRuzDateFor = function(year) {
+    var nawRuzDay = {2015: 21, 2016: 20, 2017: 20, 2018: 21, 2019: 21, 2020: 20, 2021: 20, 2022: 21, 2023: 21, 2024: 20, 2025: 20, 2026: 21, 2027: 21, 2028: 20, 2029: 20, 2030: 20, 2031: 21, 2032: 20, 2033: 20, 2034: 20, 2035: 21, 2036: 20, 2037: 20, 2038: 20, 2039: 21, 2040: 20, 2041: 20, 2042: 20, 2043: 21, 2044: 20, 2045: 20, 2046: 20, 2047: 21, 2048: 20, 2049: 20, 2050: 20, 2051: 21, 2052: 20, 2053: 20, 2054: 20, 2055: 21, 2056: 20, 2057: 20, 2058: 20, 2059: 20, 2060: 20, 2061: 20, 2062: 20, 2063: 20, 2064: 20}[year]
+    return new Date(year, 2, nawRuzDay)
+  }
+
+  return self.toBadi
+})
 
 .service('Notifications', function(Months, BadiDate, $cordovaLocalNotification) {
   registerNineteenDaysFeastNotification = function (monthId, date,antecedence) {
     $cordovaLocalNotification.schedule({
       id: monthId,
       led: '8A2BE2',
-      at: date.getTime() - antecedence * 24 * 60 * 60 * 1000,
+      at: date.getTime() - antecedence * dayDuration,
       title: 'Lembrete para próxima Festa de Dezenove Dias',
       text: 'Próxima Festa: ' + Months.get(172, monthId).arabicName + ' (' + Months.get(172, monthId).portugueseName + '), dia ' + date.toLocaleString('pt-BR').slice(0, 10),
       data: {

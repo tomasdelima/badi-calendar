@@ -16,7 +16,7 @@ angular.module('badi-calendar.controllers', [])
   }, false)
 })
 
-.controller('YearCtrl', function($scope, $state, $ionicViewSwitcher, Months, Holidays, BadiDate, DBService) {
+.controller('YearCtrl', function($scope, $state, $ionicViewSwitcher, Months, Holidays, BadiDate, GregorianDate, DBService) {
   $scope.resource = 'year'
   $scope.childResource = 'month'
   $scope.year = Number($state.params.year)
@@ -26,6 +26,7 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.collection = Months.all($scope.year)
   Holidays.load($scope)
+  $scope.toBadi = GregorianDate
 
   $scope.goToSiblingResource = function(increase){
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
@@ -37,7 +38,7 @@ angular.module('badi-calendar.controllers', [])
   }
 })
 
-.controller('MonthCtrl', function($scope, $state, $ionicViewSwitcher, Months, Days, Holidays, BadiDate, Media, DBService) {
+.controller('MonthCtrl', function($scope, $state, $ionicViewSwitcher, Months, Days, Holidays, BadiDate, GregorianDate, Media, DBService) {
   $scope.resource = 'month'
   $scope.childResource = 'day'
   $scope.year = Number($state.params.year)
@@ -49,10 +50,12 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.collection = Days.all($scope.year, $scope.month)
   $scope.holidays = Holidays.load($scope)
-  Media.loadMedia('media/' + Months.get($scope.year, $scope.month).slug + '.mp3').then(function(media) {
-    $scope.monthSound = media
-  })
-  $scope.playAudio = function() {
+  $scope.toBadi = GregorianDate
+
+  if (window.cordova) {
+    Media.loadMedia('media/' + Months.get($scope.year, $scope.month).slug + '.mp3').then(function(media) {
+      $scope.monthSound = media
+    })
   }
 
   $scope.goToParentResource = function(){
