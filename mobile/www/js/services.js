@@ -163,7 +163,7 @@ angular.module('badi-calendar.services', [])
 })
 
 .factory('GregorianDate', function () {
-   self = {}
+  var self = {}
 
   self.toBadi = function (date) {
     self.date = date
@@ -187,7 +187,7 @@ angular.module('badi-calendar.services', [])
     if (self.daysUntilNextNawRuz() <= 19) {
       return 20
     } else {
-      return Math.trunc(self.daysSinceLastNawRuz(self.year, self.month, self.day) / 19) + 1
+      return Math.floor(self.daysSinceLastNawRuz(self.year, self.month, self.day) / 19) + 1
     }
   }
 

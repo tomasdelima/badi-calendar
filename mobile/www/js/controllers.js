@@ -30,7 +30,7 @@ angular.module('badi-calendar.controllers', [])
 
   $scope.goToSiblingResource = function(increase) {
     $ionicViewSwitcher.nextDirection(nextSlideDirection(increase))
-    if ($scope.year + increase >= 172)
+    if ($scope.year + increase >= 172 && $scope.year < 220)
       $state.go('tab.year', {year: $scope.year + increase})
   }
   $scope.goToChildResource = function(month) {
@@ -51,7 +51,8 @@ angular.module('badi-calendar.controllers', [])
   $scope.collection = Days.all($scope.year, $scope.month)
   $scope.holidays = Holidays.load($scope)
   $scope.toBadi = GregorianDate
-  $scope.today = GregorianDate.toBadi(new Date()).toString
+  var today = new Date()
+  $scope.today = GregorianDate.toBadi(new Date(today.getFullYear(), today.getMonth(), today.getDate())).toString
 
   if (window.cordova) {
     Media.loadMedia('media/' + Months.get($scope.year, $scope.month).slug + '.mp3').then(function(media) {
@@ -69,8 +70,9 @@ angular.module('badi-calendar.controllers', [])
 
     correctMonth($scope)
 
-    if ($scope.newYear >= 172)
+    if ($scope.newYear >= 172 && $scope.newYear <= 220) {
       $state.go('tab.month', {year: $scope.newYear, month: $scope.newMonth})
+    }
   }
   $scope.goToChildResource = function(day) {
     $state.go('tab.day', {year: $scope.year, month: $scope.month, day: day})
@@ -238,11 +240,13 @@ nextSlideDirection = function(increase) {
   }
 }
 
-serializeDate = function(date) {
+serializeDate = function(date, divider) {
+  if (!divider) divider = ''
+
   if (date.getFullYear()) {
     var serializedDate = '' + date.getFullYear()
-    serializedDate += (date.getMonth() < 10) ? '0' + date.getMonth() : date.getMonth()
-    serializedDate += (date.getDate() < 10) ? '0' + date.getDate() : date.getDate()
+    serializedDate += divider + ((date.getMonth() < 10) ? '0' + date.getMonth() : date.getMonth())
+    serializedDate += divider + ((date.getDate() < 10) ? '0' + date.getDate() : date.getDate())
     return serializedDate
   }
 }

@@ -9,7 +9,7 @@
   <div class="parent" on-swipe-right="goToSiblingResource(-1)" on-swipe-left="goToSiblingResource(+1)">
     <a class="child" href="" ng-click="goToSiblingResource(-1)">
       <div class="card">
-        <strong class="inner {{year == 172 ? 'invalid-resource' : ''}}">
+        <strong class="inner {{month + year <= 173 || resource + year == 'year172' ? 'invalid-resource' : ''}}">
           <i class="ion-ios-arrow-back"></i>
           {{previousResource}}
         </strong>
@@ -17,7 +17,7 @@
     </a>
 
     <a class="child {{item.htmlClass}}" ng-repeat="item in collection" ng-click="goToChildResource(item.id)">
-          <span class="holidays-count" ng-if="holidays[item.id] > 0 || events[item.id] > 0">{{holidays[item.id] + events[item.id]}}</span>
+      <span class="holidays-count" ng-if="holidays[item.id] > 0 || events[item.id] > 0">{{holidays[item.id] + events[item.id]}}</span>
       <div class="card {{item.toString == today ? 'today' : ''}}">
         <div class="inner" ng-if="resource=='year'">
           <div class="arabic">{{item .alternativeName || item.arabicName}}</div>
@@ -33,7 +33,7 @@
 
     <a class="child" href="" ng-click="goToSiblingResource(+1)">
       <div class="card">
-        <strong class="inner">
+        <strong class="inner {{month + year >= 240 || resource + year == 'year220' ? 'invalid-resource' : ''}}">
           {{nextResource}}
           <i class="ion-ios-arrow-forward"></i>
         </strong>

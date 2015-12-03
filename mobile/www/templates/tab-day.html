@@ -10,7 +10,9 @@
       <div class="card {{day+'-'+month+'-'+year == today ? 'today' : ''}}">
         <div class="day-field">{{day}}</div>
         <div class="month-year-field">{{monthName}} {{year}}</div>
-        <div class="card holiday" ng-if="holidays[day].name">{{holidays[day].name}}</div>
+        <div class="scrollable" on-drag-down="scroll()">
+          <div class="card holiday" ng-if="holidays[day].name">{{holidays[day].name}}</div>
+        </div>
       </div>
     </div>
   </div>
