@@ -1,6 +1,6 @@
 {
   "name": "Calendário Badi",
-  "app_id": "",
+  "app_id": "caf7055a",
   "gulpStartupTasks": [
     "sass",
     "watch"

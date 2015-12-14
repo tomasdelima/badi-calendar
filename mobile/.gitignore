@@ -2,6 +2,7 @@
 # http://git-scm.com/docs/gitignore
 
 .deploy
+.io-config.json
 node_modules/
 platforms/
 plugins/
