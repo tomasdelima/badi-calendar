@@ -115,8 +115,8 @@ angular.module('badi-calendar.controllers', [])
   }
 
   $scope.notificationAntecedence = Number(localStorage.notificationAntecedence) || 1
-  $scope.setNotificationAntecedence = function(self) {
-    $scope.notificationAntecedence = localStorage.notificationAntecedence = self.notificationAntecedence
+  $scope.setNotificationAntecedence = function() {
+    $scope.notificationAntecedence = localStorage.notificationAntecedence = this.notificationAntecedence
     Notifications.scheduleNotifications($scope.notificationAntecedence)
   }
 
