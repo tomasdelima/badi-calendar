@@ -7,7 +7,7 @@ source ~/.bash_profile
 cd ~/Projects/badi-calendar/mobile/
 ionic build android --release
 
-export APK_PATH=~/Projects/badi-calendar/mobile/platforms/android/build/outputs/apk
+APK_PATH=~/Projects/badi-calendar/mobile/platforms/android/build/outputs/apk
 
 # Sign APK
 jarsigner -verbose -sigalg SHA1withRSA -digestalg SHA1 -keystore badi-calendar.keystore $APK_PATH/android-release-unsigned.apk alias_name

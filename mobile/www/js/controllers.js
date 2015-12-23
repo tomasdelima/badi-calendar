@@ -115,6 +115,12 @@ angular.module('badi-calendar.controllers', [])
   $scope.notifyEvents = Number(localStorage.notifyEvents) || 0
   $scope.toggleNotifyEvents = function() {
     $scope.notifyEvents = localStorage.notifyEvents = 1 - Number($scope.notifyEvents)
+
+    if ($scope.notifyEvents) {
+      Notifications.scheduleNotifications($scope.notificationAntecedence)
+    } else {
+      Notifications.unscheduleNotifications()
+    }
   }
 
   $scope.notificationAntecedence = Number(localStorage.notificationAntecedence) || 1
