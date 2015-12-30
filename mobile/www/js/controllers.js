@@ -16,6 +16,11 @@ angular.module('badi-calendar.controllers', [])
   }, false)
 })
 
+.controller('ActualYearCtrl', function($scope, $state, GregorianDate) {
+  var actualYear = GregorianDate.toBadi(new Date()).year
+  $state.go('tab.year', {year: actualYear})
+})
+
 .controller('YearCtrl', function($scope, $state, $ionicViewSwitcher, Months, Holidays, BadiDate, GregorianDate, DBService) {
   $scope.resource = 'year'
   $scope.childResource = 'month'

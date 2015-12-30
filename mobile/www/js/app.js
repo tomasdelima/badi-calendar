@@ -5,7 +5,7 @@
 // the 2nd parameter is an array of 'requires'
 // 'badi-calendar.services' is found in services.js
 // 'badi-calendar.controllers' is found in controllers.js
-angular.module('badi-calendar', ['ionic','ionic.service.core', 'ngCordova', 'badi-calendar.controllers', 'badi-calendar.services', 'gapi'])
+angular.module('badi-calendar', ['ionic', 'ionic.service.core', 'ngCordova', 'badi-calendar.controllers', 'badi-calendar.services', 'gapi'])
 
 .run(function($ionicPlatform, $cordovaLocalNotification) {
   $ionicPlatform.ready(function() {
@@ -41,11 +41,20 @@ angular.module('badi-calendar', ['ionic','ionic.service.core', 'ngCordova', 'bad
   $stateProvider
 
   // setup an abstract state for the tabs directive
-    .state('tab', {
+  .state('tab', {
     url: '/tab',
     abstract: true,
     templateUrl: 'templates/tabs.html',
     controller: 'AppCtrl'
+  })
+
+  .state('tab.actual_year', {
+    url: '/years/actual',
+    views: {
+      'tab-calendar': {
+        controller: 'ActualYearCtrl'
+      }
+    }
   })
 
   .state('tab.year', {
@@ -88,5 +97,5 @@ angular.module('badi-calendar', ['ionic','ionic.service.core', 'ngCordova', 'bad
     }
   })
 
-  $urlRouterProvider.otherwise('/tab/years/172/months')
+  $urlRouterProvider.otherwise('/tab/years/actual')
 })
