@@ -59,10 +59,8 @@ angular.module('badi-calendar.controllers', [])
   var today = new Date()
   $scope.today = GregorianDate.toBadi(new Date(today.getFullYear(), today.getMonth(), today.getDate())).toString
 
-  if (window.cordova) {
-    Media.loadMedia('media/' + Months.get($scope.year, $scope.month).slug + '.mp3').then(function(media) {
-      $scope.monthSound = media
-    })
+  $scope.playMonthSound = function () {
+    (new Audio('media/' + Months.get($scope.year, $scope.month).slug + '.mp3')).play()
   }
 
   $scope.goToParentResource = function() {
