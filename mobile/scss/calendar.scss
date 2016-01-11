@@ -20,7 +20,6 @@ $theme-color-darker: #301934;
   }
 }
 
-.platform-android .parent { padding: 93px 0 5px }
 .year-month .parent .child {
   height: calc(100%/7);
   width: calc(100%/3);
@@ -38,9 +37,15 @@ $theme-color-darker: #301934;
   }
 }
 
+.platform-android .parent {
+  margin-top: 93px;
+  height: calc(100% - 90px);
+}
+
 .parent {
-  padding: 49px 0 54px;
-  height: 100%;
+  margin-top: 60px;
+  height: calc(100% - 105px);
+
   line-height: 0;
   font-size: 0;
 
@@ -112,8 +117,8 @@ $theme-color-darker: #301934;
         i::before {
           position: relative;
           font-size: 25px;
-          top: 4px;
-          line-height: 0;
+          line-height: 13px;
+          vertical-align: top;
         }
 
         .arabic, .portuguese {
